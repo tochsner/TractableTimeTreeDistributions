@@ -21,12 +21,12 @@ function cladify_node!(node, tree_with_clades::CladifiedTree)
     children = getchildren(node)
     clade1 = cladify_node!(children[1], tree_with_clades)
     clade2 = cladify_node!(children[2], tree_with_clades) 
-
-    split = CladeSplit(clade1, clade2)
-    push!(tree_with_clades.splits, split)
-
+    
     combined_clade = union(clade1, clade2)
     push!(tree_with_clades.clades, combined_clade)
+
+    split = CladeSplit(clade1, clade2, combined_clade)
+    push!(tree_with_clades.splits, split)
 
     return combined_clade
 end

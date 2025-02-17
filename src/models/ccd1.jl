@@ -54,22 +54,22 @@ end
 # get most likely tree
 
 function get_most_likely_tree(ccd::CCD1)
-    most_likely_splits::Vector{CladeSplit} = []
-    collect_most_likely_splits!(ccd, ccd.root_clade, most_likely_splits)
-    return construct_tree_from_splits(most_likely_splits)
+    collect_most_likely_clades::Vector{Clade} = []
+    collect_most_likely_clades!(ccd, ccd.root_clade, collect_most_likely_clades)
+    return collect_most_likely_clades
 end
 
-function collect_most_likely_splits!(ccd::CCD1, current_clade::Clade, most_likely_splits::Vector{CladeSplit})
+function collect_most_likely_clades!(ccd::CCD1, current_clade::Clade, _most_likely_clades::Vector{Clade})
     if isLeaf(current_clade)
         return
     end
     
     current_splits = ccd.splits_per_clade[current_clade]
     most_likely_split = argmax(split -> get_max_log_ccp(ccd, split), current_splits)
-    push!(most_likely_splits, most_likely_split)
+    push!(_most_likely_clades, most_likely_split.parent)
 
-    collect_most_likely_splits!(ccd, most_likely_split.clade1, most_likely_splits)
-    collect_most_likely_splits!(ccd, most_likely_split.clade2, most_likely_splits)
+    collect_most_likely_clades!(ccd, most_likely_split.clade1, _most_likely_clades)
+    collect_most_likely_clades!(ccd, most_likely_split.clade2, _most_likely_clades)
 end
 
 function get_max_log_ccp(ccd::CCD1, split::CladeSplit)

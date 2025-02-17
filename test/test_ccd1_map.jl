@@ -10,9 +10,8 @@
 
     map_tree = get_most_likely_tree(ccd)
 
-    @test CladeSplit(Clade(1, 4), Clade(2, 4)) in map_tree
-    @test CladeSplit(Clade(3, 4), Clade(4, 4)) in map_tree
-    @test CladeSplit(Clade(1:2, 4), Clade(3:4, 4)) in map_tree
+    @test Clade(1:2, 4) in map_tree
+    @test Clade(3:4, 4) in map_tree
 end
 
 
@@ -28,9 +27,8 @@ end
 
     map_tree = get_most_likely_tree(ccd)
 
-    @test CladeSplit(Clade(3, 4), Clade(4, 4)) in map_tree
-    @test CladeSplit(Clade(2, 4), Clade(3:4, 4)) in map_tree
-    @test CladeSplit(Clade(1, 4), Clade(2:4, 4)) in map_tree
+    @test Clade(3:4, 4) in map_tree
+    @test Clade(2:4, 4) in map_tree
 end
 
 
@@ -50,8 +48,7 @@ end
 
     map_tree = get_most_likely_tree(ccd)
 
-    @test CladeSplit(Clade(2, 5), Clade(3, 5)) in map_tree
-    @test CladeSplit(Clade(4, 5), Clade(5, 5)) in map_tree
-    @test CladeSplit(Clade(1, 5), Clade(2:3, 5)) in map_tree
-    @test CladeSplit(Clade(1:3, 5), Clade(4:5, 5)) in map_tree
+    @test Clade(2:3, 5) in map_tree
+    @test Clade(4:5, 5) in map_tree
+    @test Clade(1:3, 5) in map_tree
 end
