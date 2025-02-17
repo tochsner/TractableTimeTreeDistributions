@@ -19,6 +19,10 @@ function Clade(leaves::Vector{Int}, num_taxa::Int)
     return Clade(bits)
 end
 
+function Base.:(==)(clade1::Clade, clade2::Clade)
+    return clade1.bits == clade2.bits
+end
+
 function Base.in(leaf::Int, clade::Clade)
     clade.bits[leaf]
 end

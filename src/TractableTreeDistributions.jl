@@ -4,14 +4,16 @@ module TractableTreeDistributions
 
 include("utils/trees.jl")
 
-export load_trees
+export load_trees, load_trees_from_newick
 
 # models
 
 include("models/clade.jl")
+include("models/clade_split.jl")
+include("models/cladify_tree.jl")
 include("models/ccd1.jl")
 
-export Clade
+export Clade, CladeSplit, TreeWithClades, cladify_tree
 export CCD1, fit, sample, get_probability
 
 end # module TractableTreeDistributions
