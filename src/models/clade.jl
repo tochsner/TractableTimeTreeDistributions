@@ -39,6 +39,10 @@ function Base.union(clade1::Clade, clade2::Clade)
     return Clade(clade1.bits .| clade2.bits)
 end
 
+function isLeaf(clade::Clade)
+    return sum(clade.bits) == 1
+end
+
 function Base.show(io::IO, clade::Clade)
     print(io, "(")
     for (i, bit) in enumerate(clade.bits)

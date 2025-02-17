@@ -23,3 +23,7 @@ end
 function Base.in(clade::Clade, clade_split::CladeSplit)
     return clade_split.clade1 == clade || clade_split.clade2 == clade
 end
+
+function construct_tree_from_splits(splits::Vector{CladeSplit})
+    return splits
+end
