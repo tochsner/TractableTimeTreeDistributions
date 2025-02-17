@@ -38,3 +38,14 @@ end
 function Base.union(clade1::Clade, clade2::Clade)
     return Clade(clade1.bits .| clade2.bits)
 end
+
+function Base.show(io::IO, clade::Clade)
+    print(io, "(")
+    for (i, bit) in enumerate(clade.bits)
+        if bit
+            print(io, i)
+            print(io, ",")
+        end
+    end
+    print(io, ")")
+end

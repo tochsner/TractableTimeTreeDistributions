@@ -1,12 +1,13 @@
 struct CladeSplit
     clade1::Clade
     clade2::Clade
+    parent::Clade
 
     function CladeSplit(clade1::Clade, clade2::Clade)
         if findfirst(x -> x, clade1.bits) < findfirst(x -> x, clade2.bits)
-            return new(clade1, clade2)
+            return new(clade1, clade2, union(clade1, clade2))
         else
-            return new(clade2, clade1)
+            return new(clade2, clade1, union(clade1, clade2))
         end
     end
 end
