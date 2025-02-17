@@ -75,12 +75,12 @@ function get_max_log_ccp(ccd::CCD1, split::CladeSplit)
     get_log_probability(ccd, split) + get_max_log_ccp(ccd, split.clade1) + get_max_log_ccp(ccd, split.clade2)
 end
 
-function get_max_log_ccp(ccd::CCD1, clade::Leaf)
-    0.0
-end
-
 function get_max_log_ccp(ccd::CCD1, clade::Clade)
     maximum(get_max_log_ccp(ccd, split) for split in ccd.splits_per_clade[clade])
+end
+
+function get_max_log_ccp(ccd::CCD1, clade::Leaf)
+    0.0
 end
 
 # sample tree
@@ -96,8 +96,8 @@ function collect_sampled_clades!(ccd::CCD1, current_clade::Clade, sampled_clades
     weights = AnalyticWeights([get_max_log_ccp(ccd, split) for split in current_splits])
 
     sampled_split = StatsBase.sample(current_splits, weights)
-
     push!(sampled_clades, sampled_split.parent)
+
     collect_sampled_clades!(ccd, sampled_split.clade1, sampled_clades)
     collect_sampled_clades!(ccd, sampled_split.clade2, sampled_clades)
 end
