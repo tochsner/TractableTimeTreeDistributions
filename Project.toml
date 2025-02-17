@@ -4,7 +4,9 @@ authors = ["Tobia Ochsner <tobia.ochsner@hotmail.com>"]
 version = "0.1.0"
 
 [deps]
-NewickTree = "b0a14db8-6308-4ebc-8917-f72cd81f5094"
+PhyloNetworks = "33ad39ac-ed31-50eb-9b15-43d0656eaa72"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [compat]
-NewickTree = "0.3.1"
+PhyloNetworks = "1.0.0"
+Test = "1.11.0"
