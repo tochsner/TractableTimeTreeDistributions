@@ -54,22 +54,22 @@ end
 # get most likely tree
 
 function get_most_likely_tree(ccd::CCD1)
-    collect_most_likely_clades::Vector{Clade} = []
-    collect_most_likely_clades!(ccd, ccd.root_clade, collect_most_likely_clades)
-    return collect_most_likely_clades
+    most_likely_clades::Vector{Clade} = []
+    collect_most_likely_clades!(ccd, ccd.root_clade, most_likely_clades)
+    return most_likely_clades
 end
 
-function collect_most_likely_clades!(ccd::CCD1, current_clade::Clade, _most_likely_clades::Vector{Clade})
+function collect_most_likely_clades!(ccd::CCD1, current_clade::Clade, most_likely_clades::Vector{Clade})
     if isLeaf(current_clade)
         return
     end
     
     current_splits = ccd.splits_per_clade[current_clade]
     most_likely_split = argmax(split -> get_max_log_ccp(ccd, split), current_splits)
-    push!(_most_likely_clades, most_likely_split.parent)
+    push!(most_likely_clades, most_likely_split.parent)
 
-    collect_most_likely_clades!(ccd, most_likely_split.clade1, _most_likely_clades)
-    collect_most_likely_clades!(ccd, most_likely_split.clade2, _most_likely_clades)
+    collect_most_likely_clades!(ccd, most_likely_split.clade1, most_likely_clades)
+    collect_most_likely_clades!(ccd, most_likely_split.clade2, most_likely_clades)
 end
 
 function get_max_log_ccp(ccd::CCD1, split::CladeSplit)
@@ -84,7 +84,33 @@ function get_max_log_ccp(ccd::CCD1, clade::Clade)
     end
 end
 
-# get most likely tree
+# sample tree
 
 function sample(ccd::CCD1)
+    sampled_clades::Vector{Clade} = []
+    collect_sampled_clades!(ccd, ccd.root_clade, sampled_clades)
+    return sampled_clades
+end
+
+function collect_sampled_clades!(ccd::CCD1, current_clade::Clade, most_likely_clades::Vector{Clade})
+    if isLeaf(current_clade)
+        return
+    end
+
+    current_splits = ccd.splits_per_clade[current_clade]
+    
+    skip_until = rand()
+    aggregate = 0.0
+    for split in current_splits
+        aggregate += get_max_log_ccp(ccd, split)
+
+        if skip_until < aggregate
+            push!(most_likely_clades, split.parent)
+
+            collect_sampled_clades!(ccd, split.clade1, most_likely_clades)
+            collect_sampled_clades!(ccd, split.clade2, most_likely_clades)
+            
+            return
+        end
+    end
 end

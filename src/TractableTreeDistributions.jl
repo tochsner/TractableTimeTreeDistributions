@@ -6,12 +6,12 @@ include("utils/trees.jl")
 
 export load_trees, load_trees_from_newick
 
-# models
+# CCD
 
-include("models/clade.jl")
-include("models/clade_split.jl")
-include("models/cladify_tree.jl")
-include("models/ccd1.jl")
+include("ccd/clade.jl")
+include("ccd/clade_split.jl")
+include("ccd/cladify_tree.jl")
+include("ccd/ccd1.jl")
 
 export Clade, CladeSplit, TreeWithClades, cladify_tree
 export CCD1, fit, sample, get_log_probability, get_most_likely_tree
