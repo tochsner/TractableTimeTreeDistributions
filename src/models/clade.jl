@@ -9,7 +9,7 @@ function Clade(leaf::Int, num_taxa::Int)
 end
 
 
-function Clade(leaves::Vector{Int}, num_taxa::Int)
+function Clade(leaves, num_taxa::Int)
     bits = BitVector(undef, num_taxa)
     
     for leaf in leaves
@@ -21,6 +21,10 @@ end
 
 function Base.:(==)(clade1::Clade, clade2::Clade)
     return clade1.bits == clade2.bits
+end
+
+function Base.hash(clade::Clade, h::UInt)
+    return hash(clade.bits, h)
 end
 
 function Base.in(leaf::Int, clade::Clade)

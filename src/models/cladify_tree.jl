@@ -1,16 +1,16 @@
-struct TreeWithClades
+struct CladifiedTree
     tree::Tree
     clades::Vector{Clade}
     splits::Vector{CladeSplit}
 end
 
-function cladify_tree(tree::Tree)
-    tree_with_clades = TreeWithClades(tree, [], [])
+function cladify_tree(tree::Tree)::CladifiedTree
+    tree_with_clades = CladifiedTree(tree, [], [])
     cladify_node(getroot(tree), tree_with_clades)
     return tree_with_clades
 end
 
-function cladify_node(node, tree_with_clades::TreeWithClades)
+function cladify_node(node, tree_with_clades::CladifiedTree)
     if isleaf(node)
         taxa_index = findfirst(x -> x == node.name, tiplabels(tree_with_clades.tree))
         clade = Clade(taxa_index, tree_with_clades.tree.numtaxa)
