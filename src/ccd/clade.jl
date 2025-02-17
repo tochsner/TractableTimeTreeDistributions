@@ -30,7 +30,7 @@ function Base.:(==)(clade1::AbstractClade, clade2::AbstractClade)
 end
 
 function Base.hash(clade::AbstractClade, h::UInt)
-    return hash(clade.bits, h)
+    hash(clade.bits, h)
 end
 
 function Base.in(leaf::Int, clade::AbstractClade)
@@ -42,11 +42,11 @@ function Base.in(child_clade::AbstractClade, clade::AbstractClade)
 end
 
 function Base.union(clade1::AbstractClade, clade2::AbstractClade)
-    return Clade(clade1.bits .| clade2.bits)
+    Clade(clade1.bits .| clade2.bits)
 end
 
 function isLeaf(clade::AbstractClade)
-    return sum(clade.bits) == 1
+    sum(clade.bits) == 1
 end
 
 function Base.show(io::IO, clade::AbstractClade)

@@ -48,7 +48,7 @@ function get_log_probability(ccd::CCD1, tree::Tree)
 end
 
 function get_log_probability(ccd::CCD1, split::CladeSplit)
-    return log(ccd.num_occurrences[split] / ccd.num_occurrences[split.parent])
+    log(ccd.num_occurrences[split] / ccd.num_occurrences[split.parent])
 end
 
 # get most likely tree
@@ -61,6 +61,7 @@ end
 
 function collect_most_likely_clades!(ccd::CCD1, current_clade::Clade, most_likely_clades::Vector{Clade})
     current_splits = ccd.splits_per_clade[current_clade]
+
     most_likely_split = argmax(split -> get_max_log_ccp(ccd, split), current_splits)
     push!(most_likely_clades, most_likely_split.parent)
 
@@ -71,15 +72,15 @@ end
 function collect_most_likely_clades!(ccd::CCD1, current_clade::Leaf, most_likely_clades::Vector{Clade}) end
 
 function get_max_log_ccp(ccd::CCD1, split::CladeSplit)
-    return get_log_probability(ccd, split) + get_max_log_ccp(ccd, split.clade1) + get_max_log_ccp(ccd, split.clade2)
+    get_log_probability(ccd, split) + get_max_log_ccp(ccd, split.clade1) + get_max_log_ccp(ccd, split.clade2)
 end
 
 function get_max_log_ccp(ccd::CCD1, clade::Leaf)
-    return 0.0
+    0.0
 end
 
 function get_max_log_ccp(ccd::CCD1, clade::Clade)
-    return maximum(get_max_log_ccp(ccd, split) for split in ccd.splits_per_clade[clade])
+    maximum(get_max_log_ccp(ccd, split) for split in ccd.splits_per_clade[clade])
 end
 
 # sample tree

@@ -15,5 +15,5 @@ function load_trees_from_newick(newicks::Vector{String})::Vector{Tree}
 end
 
 function get_leaf_index(tree::Tree, leaf::String)
-    return findfirst(x -> x == leaf, sort(tiplabels(tree)))
+    findfirst(x -> x == leaf, sort(tiplabels(tree)))
 end

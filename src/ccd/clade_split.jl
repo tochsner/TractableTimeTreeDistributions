@@ -17,17 +17,17 @@ function CladeSplit(clade1::AbstractClade, clade2::AbstractClade)
 end
 
 function Base.:(==)(clade_split1::CladeSplit, clade_split2::CladeSplit)
-    return clade_split1.clade1 == clade_split2.clade1 && clade_split1.clade2 == clade_split2.clade2
+    clade_split1.clade1 == clade_split2.clade1 && clade_split1.clade2 == clade_split2.clade2
 end
 
 function Base.hash(clade_split::CladeSplit, h::UInt)
-    return hash(clade_split.clade1, hash(clade_split.clade2, h))
+    hash(clade_split.clade1, hash(clade_split.clade2, h))
 end
 
 function Base.in(clade::AbstractClade, clade_split::CladeSplit)
-    return clade_split.clade1 == clade || clade_split.clade2 == clade
+    clade_split.clade1 == clade || clade_split.clade2 == clade
 end
 
 function construct_tree_from_splits(splits::Vector{CladeSplit})
-    return splits
+    splits
 end
