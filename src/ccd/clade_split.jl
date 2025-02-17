@@ -1,9 +1,9 @@
 struct CladeSplit
-    clade1::Clade
-    clade2::Clade
-    parent::Clade
+    clade1::AbstractClade
+    clade2::AbstractClade
+    parent::AbstractClade
     
-    function CladeSplit(clade1::Clade, clade2::Clade, parent::Clade)
+    function CladeSplit(clade1::AbstractClade, clade2::AbstractClade, parent::AbstractClade)
         if findfirst(x -> x, clade1.bits) < findfirst(x -> x, clade2.bits)
             return new(clade1, clade2, parent)
         else
@@ -12,7 +12,7 @@ struct CladeSplit
     end
 end
 
-function CladeSplit(clade1::Clade, clade2::Clade)
+function CladeSplit(clade1::AbstractClade, clade2::AbstractClade)
     CladeSplit(clade1, clade2, union(clade1, clade2))
 end
 
@@ -24,7 +24,7 @@ function Base.hash(clade_split::CladeSplit, h::UInt)
     return hash(clade_split.clade1, hash(clade_split.clade2, h))
 end
 
-function Base.in(clade::Clade, clade_split::CladeSplit)
+function Base.in(clade::AbstractClade, clade_split::CladeSplit)
     return clade_split.clade1 == clade || clade_split.clade2 == clade
 end
 

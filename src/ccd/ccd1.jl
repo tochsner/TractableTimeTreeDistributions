@@ -5,12 +5,12 @@ struct CCD1 <: CCD
     num_taxa::Int
     num_trees::Int
 
-    root_clade::Clade
-    clades::Set{Clade}
+    root_clade::AbstractClade
+    clades::Set{AbstractClade}
     splits::Set{CladeSplit}
-    splits_per_clade::Dict{Clade,Set{CladeSplit}}
+    splits_per_clade::Dict{AbstractClade,Set{CladeSplit}}
 
-    num_occurrences::Dict{Union{Clade,CladeSplit},Int}
+    num_occurrences::Dict{Union{AbstractClade,CladeSplit},Int}
 end
 
 function CCD1(trees::Vector{Tree})
@@ -60,10 +60,6 @@ function get_most_likely_tree(ccd::CCD1)
 end
 
 function collect_most_likely_clades!(ccd::CCD1, current_clade::Clade, most_likely_clades::Vector{Clade})
-    if isLeaf(current_clade)
-        return
-    end
-    
     current_splits = ccd.splits_per_clade[current_clade]
     most_likely_split = argmax(split -> get_max_log_ccp(ccd, split), current_splits)
     push!(most_likely_clades, most_likely_split.parent)
@@ -72,16 +68,18 @@ function collect_most_likely_clades!(ccd::CCD1, current_clade::Clade, most_likel
     collect_most_likely_clades!(ccd, most_likely_split.clade2, most_likely_clades)
 end
 
+function collect_most_likely_clades!(ccd::CCD1, current_clade::Leaf, most_likely_clades::Vector{Clade}) end
+
 function get_max_log_ccp(ccd::CCD1, split::CladeSplit)
     return get_log_probability(ccd, split) + get_max_log_ccp(ccd, split.clade1) + get_max_log_ccp(ccd, split.clade2)
 end
 
+function get_max_log_ccp(ccd::CCD1, clade::Leaf)
+    return 0.0
+end
+
 function get_max_log_ccp(ccd::CCD1, clade::Clade)
-    if isLeaf(clade)
-        return 0.0
-    else
-        return maximum(get_max_log_ccp(ccd, split) for split in ccd.splits_per_clade[clade])
-    end
+    return maximum(get_max_log_ccp(ccd, split) for split in ccd.splits_per_clade[clade])
 end
 
 # sample tree
@@ -93,12 +91,8 @@ function sample(ccd::CCD1)
 end
 
 function collect_sampled_clades!(ccd::CCD1, current_clade::Clade, most_likely_clades::Vector{Clade})
-    if isLeaf(current_clade)
-        return
-    end
-
     current_splits = ccd.splits_per_clade[current_clade]
-    
+
     skip_until = rand()
     aggregate = 0.0
     for split in current_splits
@@ -109,8 +103,10 @@ function collect_sampled_clades!(ccd::CCD1, current_clade::Clade, most_likely_cl
 
             collect_sampled_clades!(ccd, split.clade1, most_likely_clades)
             collect_sampled_clades!(ccd, split.clade2, most_likely_clades)
-            
+
             return
         end
     end
 end
+
+function collect_sampled_clades!(ccd::CCD1, current_clade::Leaf, most_likely_clades::Vector{Clade}) end

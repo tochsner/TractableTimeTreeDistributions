@@ -1,6 +1,6 @@
 struct CladifiedTree
     tree::Tree
-    clades::Vector{Clade}
+    clades::Vector{AbstractClade}
     splits::Vector{CladeSplit}
 end
 
@@ -13,7 +13,7 @@ end
 function cladify_node!(node, tree_with_clades::CladifiedTree)
     if isleaf(node)
         taxa_index = get_leaf_index(tree_with_clades.tree, node.name)
-        clade = Clade(taxa_index, tree_with_clades.tree.numtaxa)
+        clade = Leaf(taxa_index, tree_with_clades.tree.numtaxa)
         push!(tree_with_clades.clades, clade)
         return clade
     end
