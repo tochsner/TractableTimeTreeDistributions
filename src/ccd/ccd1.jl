@@ -91,23 +91,15 @@ function sample(ccd::CCD1)
     return sampled_clades
 end
 
-function collect_sampled_clades!(ccd::CCD1, current_clade::Clade, most_likely_clades::Vector{Clade})
-    current_splits = ccd.splits_per_clade[current_clade]
+function collect_sampled_clades!(ccd::CCD1, current_clade::Clade, sampled_clades::Vector{Clade})
+    current_splits = collect(ccd.splits_per_clade[current_clade])
+    weights = AnalyticWeights([get_max_log_ccp(ccd, split) for split in current_splits])
 
-    skip_until = rand()
-    aggregate = 0.0
-    for split in current_splits
-        aggregate += get_max_log_ccp(ccd, split)
+    sampled_split = StatsBase.sample(current_splits, weights)
 
-        if skip_until < aggregate
-            push!(most_likely_clades, split.parent)
-
-            collect_sampled_clades!(ccd, split.clade1, most_likely_clades)
-            collect_sampled_clades!(ccd, split.clade2, most_likely_clades)
-
-            return
-        end
-    end
+    push!(sampled_clades, sampled_split.parent)
+    collect_sampled_clades!(ccd, sampled_split.clade1, sampled_clades)
+    collect_sampled_clades!(ccd, sampled_split.clade2, sampled_clades)
 end
 
-function collect_sampled_clades!(ccd::CCD1, current_clade::Leaf, most_likely_clades::Vector{Clade}) end
+function collect_sampled_clades!(ccd::CCD1, current_clade::Leaf, sampled_clades::Vector{Clade}) end

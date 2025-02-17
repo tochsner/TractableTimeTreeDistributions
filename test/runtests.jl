@@ -1,6 +1,7 @@
 using TractableTreeDistributions
 using Test
 
+include("test_ccd1_sampling.jl")
 include("test_tree_construction.jl")
 include("test_clades.jl")
 include("test_clade_splits.jl")

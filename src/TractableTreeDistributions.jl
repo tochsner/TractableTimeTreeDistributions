@@ -1,5 +1,7 @@
 module TractableTreeDistributions
 
+using StatsBase
+
 # utils
 
 include("utils/trees.jl")
