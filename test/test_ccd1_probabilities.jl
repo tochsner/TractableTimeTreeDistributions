@@ -47,3 +47,17 @@ end
     @test isapprox(get_log_probability(ccd, other_trees[2]), log(6/ 49))
     @test isapprox(get_log_probability(ccd, other_trees[3]), log(6 / 49))
 end
+
+@testset "test probabilities on bigger Yule-10 treeset" begin
+    reference_trees = load_trees("ref_trees.trees")
+    query_trees = load_trees("query_trees.trees")
+
+    ccd = CCD1(reference_trees)
+
+    # compare with values from the CCD java implementation 
+    @test isapprox(get_log_probability(ccd, query_trees[1]), -2.450003130511848)
+    @test isapprox(get_log_probability(ccd, query_trees[2]), -1.3309686096958018)
+    @test isapprox(get_log_probability(ccd, query_trees[3]), -1.3309686096958018)
+    @test isapprox(get_log_probability(ccd, query_trees[4]), -2.470057331927599)
+    @test isapprox(get_log_probability(ccd, query_trees[5]), -2.0143841426158016)
+end
