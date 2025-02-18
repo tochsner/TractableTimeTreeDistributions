@@ -21,19 +21,19 @@ function CCD1(trees::Vector{Tree})
     root_clade = Clade(1:num_taxa, num_taxa)
     clades = Set()
     splits = Set()
-    num_occurrences = Dict()
-    splits_per_clade = Dict()
+    num_occurrences = DefaultDict(0)
+    splits_per_clade = DefaultDict(Set())
 
     for tree in cladified_trees
         for clade in tree.clades
             push!(clades, clade)
-            num_occurrences[clade] = get(num_occurrences, clade, 0) + 1
+            num_occurrences[clade] += 1
         end
 
         for split in tree.splits
             push!(splits, split)
-            splits_per_clade[split.parent] = push!(get(splits_per_clade, split.parent, Set()), split)
-            num_occurrences[split] = get(num_occurrences, split, 0) + 1
+            push!(splits_per_clade[split.parent], split)
+            num_occurrences[split] += 1
         end
     end
 

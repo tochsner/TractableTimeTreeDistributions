@@ -2,10 +2,20 @@ abstract type AbstractClade end
 
 struct Clade <: AbstractClade
     bits::BitVector
+    hash::UInt
+
+    function Clade(bits::BitVector)
+        new(bits, hash(bits))
+    end
 end
 
 struct Leaf <: AbstractClade
     bits::BitVector
+    hash::UInt
+
+    function Leaf(bits::BitVector)
+        new(bits, hash(bits))
+    end
 end
 
 function Leaf(leaf::Int, num_taxa::Int)
@@ -30,7 +40,7 @@ function Base.:(==)(clade1::AbstractClade, clade2::AbstractClade)
 end
 
 function Base.hash(clade::AbstractClade, h::UInt)
-    hash(clade.bits, h)
+    clade.hash
 end
 
 function Base.in(leaf::Int, clade::AbstractClade)

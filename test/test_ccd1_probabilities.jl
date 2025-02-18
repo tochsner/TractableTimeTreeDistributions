@@ -1,3 +1,5 @@
+using Profile
+
 @testset "test ccd probabilities with two trees and four taxa" begin
     newicks = [
         "((A:1,B:1):1,(C:1,D:1):1):1;",
@@ -52,7 +54,10 @@ end
     reference_trees = load_trees("ref_trees.trees")
     query_trees = load_trees("query_trees.trees")
 
+    @time CCD1(reference_trees)
     ccd = CCD1(reference_trees)
+
+    Profile.print(format=:flat, sortedby=:overhead)
 
     # compare with values from the CCD java implementation 
     @test isapprox(get_log_probability(ccd, query_trees[1]), -2.450003130511848)
