@@ -76,7 +76,7 @@ function get_max_log_ccp(ccd::CCD1, split::CladeSplit)
 end
 
 function get_max_log_ccp(ccd::CCD1, clade::Clade)
-    maximum(get_max_log_ccp(ccd, split) for split in ccd.splits_per_clade[clade])
+    (get_max_log_ccp(ccd, split) for split in ccd.splits_per_clade[clade]) |> maximum
 end
 
 function get_max_log_ccp(ccd::CCD1, clade::Leaf)
