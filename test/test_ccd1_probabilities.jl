@@ -54,7 +54,7 @@ end
     reference_trees = load_trees("ref_trees.trees")
     query_trees = load_trees("query_trees.trees")
 
-    @time CCD1(reference_trees)
+    @profile CCD1(reference_trees)
     ccd = CCD1(reference_trees)
 
     Profile.print(format=:flat, sortedby=:overhead)

@@ -7,13 +7,10 @@
     @test ccd.num_taxa == 2
     @test ccd.root_clade == Clade(1:2, 2)
     
-    @test Clade(1, 2) in ccd.clades
-    @test Clade(2, 2) in ccd.clades
+    @test Clade(1:2, 2) in ccd.clades
 
     @test CladeSplit(Clade(1, 2), Clade(2, 2)) in ccd.splits
 
-    @test ccd.num_occurrences[Clade(1, 2)] == 1
-    @test ccd.num_occurrences[Clade(2, 2)] == 1
     @test ccd.num_occurrences[Clade(1:2, 2)] == 1
     
     @test ccd.num_occurrences[CladeSplit(Clade(1, 2), Clade(2, 2))] == 1
@@ -31,10 +28,6 @@ end
     @test ccd.num_taxa == 4
     @test ccd.root_clade == Clade(1:4, 4)
     
-    @test Clade(1, 4) in ccd.clades
-    @test Clade(2, 4) in ccd.clades
-    @test Clade(3, 4) in ccd.clades
-    @test Clade(4, 4) in ccd.clades
     @test Clade([1, 2], 4) in ccd.clades
     @test Clade([3, 4], 4) in ccd.clades
     @test Clade([2, 3, 4], 4) in ccd.clades
@@ -45,10 +38,6 @@ end
     @test CladeSplit(Clade([1, 2], 4), Clade([3, 4], 4)) in ccd.splits
     @test CladeSplit(Clade([2, 3, 4], 4), Clade(1, 4)) in ccd.splits
 
-    @test ccd.num_occurrences[Clade(1, 4)] == 2
-    @test ccd.num_occurrences[Clade(2, 4)] == 2
-    @test ccd.num_occurrences[Clade(3, 4)] == 2
-    @test ccd.num_occurrences[Clade(4, 4)] == 2
     @test ccd.num_occurrences[Clade([1, 2], 4)] == 1
     @test ccd.num_occurrences[Clade([3, 4], 4)] == 2
     @test ccd.num_occurrences[Clade([2, 3, 4], 4)] == 1

@@ -4,9 +4,8 @@
 
     cladified_tree = cladify_tree(tree[1])
 
-    @test length(cladified_tree.clades) == 1
-    @test cladified_tree.clades[1] == Clade(1, 1)
-    @test cladified_tree.splits == []
+    @test cladified_tree.clades == Set()
+    @test cladified_tree.splits == Set()
 end
 
 @testset "cladify tree with two taxa" begin
@@ -15,9 +14,7 @@ end
 
     cladified_tree = cladify_tree(tree[1])
 
-    @test length(cladified_tree.clades) == 3
-    @test Clade(1, 2) in cladified_tree.clades
-    @test Clade(2, 2) in cladified_tree.clades
+    @test length(cladified_tree.clades) == 1
     @test Clade([1, 2], 2) in cladified_tree.clades
 
     @test length(cladified_tree.splits) == 1
@@ -30,11 +27,7 @@ end
 
     cladified_tree = cladify_tree(tree[1])
 
-    @test length(cladified_tree.clades) == 7
-    @test Clade(1, 4) in cladified_tree.clades
-    @test Clade(2, 4) in cladified_tree.clades
-    @test Clade(3, 4) in cladified_tree.clades
-    @test Clade(4, 4) in cladified_tree.clades
+    @test length(cladified_tree.clades) == 3
     @test Clade([3, 4], 4) in cladified_tree.clades
     @test Clade([2, 3, 4], 4) in cladified_tree.clades
     @test Clade([1, 2, 3, 4], 4) in cladified_tree.clades
@@ -51,11 +44,7 @@ end
 
     cladified_tree = cladify_tree(tree[1])
 
-    @test length(cladified_tree.clades) == 7
-    @test Clade(1, 4) in cladified_tree.clades
-    @test Clade(2, 4) in cladified_tree.clades
-    @test Clade(3, 4) in cladified_tree.clades
-    @test Clade(4, 4) in cladified_tree.clades
+    @test length(cladified_tree.clades) == 3
     @test Clade([1, 2], 4) in cladified_tree.clades
     @test Clade([3, 4], 4) in cladified_tree.clades
     @test Clade([1, 2, 3, 4], 4) in cladified_tree.clades

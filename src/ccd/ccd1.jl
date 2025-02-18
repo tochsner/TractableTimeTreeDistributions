@@ -1,7 +1,6 @@
 abstract type CCD end
 
 struct CCD1 <: CCD
-    cladifies_trees::Vector{CladifiedTree}
     num_taxa::Int
     num_trees::Int
 
@@ -16,28 +15,29 @@ end
 function CCD1(trees::Vector{Tree})
     num_taxa = length(tiplabels(trees[1]))
     num_trees = length(trees)
-    cladified_trees = map(cladify_tree, trees)
 
     root_clade = Clade(1:num_taxa, num_taxa)
     clades = Set()
     splits = Set()
     num_occurrences = DefaultDict(0)
-    splits_per_clade = DefaultDict(Set())
+    splits_per_clade = DefaultDict(Set)
 
-    for tree in cladified_trees
-        for clade in tree.clades
+    for tree in trees
+        function clade_visitor(clade)
             push!(clades, clade)
             num_occurrences[clade] += 1
         end
 
-        for split in tree.splits
+        function split_visitor(split)
             push!(splits, split)
             push!(splits_per_clade[split.parent], split)
             num_occurrences[split] += 1
         end
+
+        cladify_tree(tree, clade_visitor, split_visitor)
     end
 
-    return CCD1(cladified_trees, num_taxa, num_trees, root_clade, clades, splits, splits_per_clade, num_occurrences)
+    return CCD1(num_taxa, num_trees, root_clade, clades, splits, splits_per_clade, num_occurrences)
 end
 
 # get log probability
@@ -71,11 +71,11 @@ end
 
 function collect_most_likely_clades!(ccd::CCD1, current_clade::Leaf, most_likely_clades::Set{Clade}) end
 
-function get_max_log_ccp(ccd::CCD1, split::CladeSplit)
+@memoize function get_max_log_ccp(ccd::CCD1, split::CladeSplit)
     get_log_probability(ccd, split) + get_max_log_ccp(ccd, split.clade1) + get_max_log_ccp(ccd, split.clade2)
 end
 
-function get_max_log_ccp(ccd::CCD1, clade::Clade)
+@memoize function get_max_log_ccp(ccd::CCD1, clade::Clade)
     (get_max_log_ccp(ccd, split) for split in ccd.splits_per_clade[clade]) |> maximum
 end
 

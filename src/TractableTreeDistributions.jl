@@ -1,6 +1,8 @@
 module TractableTreeDistributions
 
 using StatsBase
+using DataStructures
+using Memoization
 
 # utils
 
