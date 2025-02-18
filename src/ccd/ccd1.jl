@@ -54,12 +54,12 @@ end
 # get most likely tree
 
 function get_most_likely_tree(ccd::CCD1)
-    most_likely_clades::Vector{Clade} = []
+    most_likely_clades::Set{Clade} = Set([])
     collect_most_likely_clades!(ccd, ccd.root_clade, most_likely_clades)
     return most_likely_clades
 end
 
-function collect_most_likely_clades!(ccd::CCD1, current_clade::Clade, most_likely_clades::Vector{Clade})
+function collect_most_likely_clades!(ccd::CCD1, current_clade::Clade, most_likely_clades::Set{Clade})
     current_splits = ccd.splits_per_clade[current_clade]
 
     most_likely_split = argmax(split -> get_max_log_ccp(ccd, split), current_splits)
@@ -69,7 +69,7 @@ function collect_most_likely_clades!(ccd::CCD1, current_clade::Clade, most_likel
     collect_most_likely_clades!(ccd, most_likely_split.clade2, most_likely_clades)
 end
 
-function collect_most_likely_clades!(ccd::CCD1, current_clade::Leaf, most_likely_clades::Vector{Clade}) end
+function collect_most_likely_clades!(ccd::CCD1, current_clade::Leaf, most_likely_clades::Set{Clade}) end
 
 function get_max_log_ccp(ccd::CCD1, split::CladeSplit)
     get_log_probability(ccd, split) + get_max_log_ccp(ccd, split.clade1) + get_max_log_ccp(ccd, split.clade2)
@@ -86,12 +86,12 @@ end
 # sample tree
 
 function sample(ccd::CCD1)
-    sampled_clades::Vector{Clade} = []
+    sampled_clades::Set{Clade} = Set([])
     collect_sampled_clades!(ccd, ccd.root_clade, sampled_clades)
     return sampled_clades
 end
 
-function collect_sampled_clades!(ccd::CCD1, current_clade::Clade, sampled_clades::Vector{Clade})
+function collect_sampled_clades!(ccd::CCD1, current_clade::Clade, sampled_clades::Set{Clade})
     current_splits = collect(ccd.splits_per_clade[current_clade])
     weights = AnalyticWeights([get_max_log_ccp(ccd, split) for split in current_splits])
 
@@ -102,4 +102,4 @@ function collect_sampled_clades!(ccd::CCD1, current_clade::Clade, sampled_clades
     collect_sampled_clades!(ccd, sampled_split.clade2, sampled_clades)
 end
 
-function collect_sampled_clades!(ccd::CCD1, current_clade::Leaf, sampled_clades::Vector{Clade}) end
+function collect_sampled_clades!(ccd::CCD1, current_clade::Leaf, sampled_clades::Set{Clade}) end
