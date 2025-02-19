@@ -1,7 +1,7 @@
 using TractableTreeDistributions
 using Test
 
-# include("test_height_ratio_parameterization.jl")
+include("test_height_ratio_parameterization.jl")
 include("test_tree_construction.jl")
 include("test_ccd1_probabilities.jl")
 include("test_clades.jl")
