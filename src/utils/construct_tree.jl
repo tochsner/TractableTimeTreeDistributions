@@ -18,7 +18,7 @@ function construct_tree(clades::Set{AbstractClade})::Phylo.RootedTree
             potential_parents = clade_to_node |> keys |> filter(x -> clade in x && x != clade)
             parent = argmin(size, potential_parents)
 
-            Phylo.createbranch!(tree, clade_to_node[parent], clade_to_node[clade])
+            Phylo.createbranch!(tree, clade_to_node[parent], clade_to_node[clade], parent.height - clade.height)
         end
     end
 

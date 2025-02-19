@@ -3,9 +3,10 @@ abstract type AbstractClade end
 struct Clade <: AbstractClade
     bits::BitVector
     hash::UInt
+    height::Float64
 
-    function Clade(bits::BitVector)
-        new(bits, hash(bits))
+    function Clade(bits::BitVector, height::Float64=0.0)
+        new(bits, hash(bits), height)
     end
 end
 
@@ -13,9 +14,10 @@ struct Leaf <: AbstractClade
     bits::BitVector
     name::String
     hash::UInt
+    height::Float64
 
-    function Leaf(bits::BitVector, name::String)
-        new(bits, name, hash(bits))
+    function Leaf(bits::BitVector, name::String, height::Float64=0.0)
+        new(bits, name, hash(bits), height)
     end
 end
 
@@ -56,6 +58,10 @@ function Base.union(clade1::AbstractClade, clade2::AbstractClade)
     Clade(clade1.bits .| clade2.bits)
 end
 
+function Base.union(clade1::AbstractClade, clade2::AbstractClade, height::Float64)
+    Clade(clade1.bits .| clade2.bits, height)
+end
+
 function is_leaf(clade::AbstractClade)
     sum(clade.bits) == 1
 end
@@ -77,4 +83,6 @@ function Base.show(io::IO, clade::AbstractClade)
         end
     end
     print(io, ")")
+    print(io, ":")
+    print(io, clade.height)
 end

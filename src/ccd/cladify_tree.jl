@@ -41,8 +41,9 @@ function cladify_node(
     children = getchildren(node)
     clade1 = cladify_node(children[1], clade_visitor, split_visitor, tip_indices, num_taxa)
     clade2 = cladify_node(children[2], clade_visitor, split_visitor, tip_indices, num_taxa)
-
-    combined_clade = union(clade1, clade2)
+    
+    combined_clade_height = clade1.height + getparentedge(children[1]).length
+    combined_clade = union(clade1, clade2, combined_clade_height)
     clade_visitor(combined_clade)
 
     split = CladeSplit(clade1, clade2, combined_clade)

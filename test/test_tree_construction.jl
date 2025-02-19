@@ -11,7 +11,7 @@ using Phylo
 end
 
 @testset "construct tree with four taxa" begin
-    newick = "(A:1,(B:1,(C:1,D:1):1));"
+    newick = "(A:3,(B:2,(C:1,D:1):1):1);"
     tree = load_trees_from_newick(newick)[1]
     cladified_tree = cladify_tree(tree)
 
