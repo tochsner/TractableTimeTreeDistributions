@@ -1,6 +1,6 @@
 abstract type AbstractClade end
 
-struct Clade <: AbstractClade
+mutable struct Clade <: AbstractClade
     bits::BitVector
     hash::UInt
     height::Float64

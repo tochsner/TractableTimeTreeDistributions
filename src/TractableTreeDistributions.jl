@@ -26,11 +26,11 @@ include("utils/construct_tree.jl")
 
 # Parameterizations
 
-include("parameterization/parameterization.jl")
 include("parameterization/parameterized_tree.jl")
+include("parameterization/parameterization.jl")
 include("parameterization/height_ratio_parameterization.jl")
 
 export HeightRatioParameterization
-export parameterize, set_heights
+export parameterize, set_heights!
 
 end # module TractableTreeDistributions
