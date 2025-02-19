@@ -2,6 +2,7 @@ struct CladeSplit
     clade1::AbstractClade
     clade2::AbstractClade
     parent::AbstractClade
+    
     hash::UInt
     
     function CladeSplit(clade1::AbstractClade, clade2::AbstractClade, parent::AbstractClade)

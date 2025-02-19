@@ -54,10 +54,7 @@ end
     reference_trees = load_trees("ref_trees.trees")
     query_trees = load_trees("query_trees.trees")
 
-    @profile CCD1(reference_trees)
     ccd = CCD1(reference_trees)
-
-    Profile.print(format=:flat, sortedby=:overhead)
 
     # compare with values from the CCD java implementation 
     @test isapprox(get_log_probability(ccd, query_trees[1]), -2.450003130511848)
