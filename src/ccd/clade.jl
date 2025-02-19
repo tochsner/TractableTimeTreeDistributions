@@ -11,17 +11,18 @@ end
 
 struct Leaf <: AbstractClade
     bits::BitVector
+    name::String
     hash::UInt
 
-    function Leaf(bits::BitVector)
-        new(bits, hash(bits))
+    function Leaf(bits::BitVector, name::String)
+        new(bits, name, hash(bits))
     end
 end
 
-function Leaf(leaf::Int, num_taxa::Int)
+function Leaf(leaf::Int, num_taxa::Int, name::String)
     bits = BitVector(undef, num_taxa)
     bits[leaf] = true
-    return Leaf(bits)
+    return Leaf(bits, name)
 end
 
 

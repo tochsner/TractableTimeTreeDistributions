@@ -32,7 +32,7 @@ function cladify_node(
 )
     if isleaf(node)
         taxa_index = tip_indices[node.name]
-        clade = Leaf(taxa_index, num_taxa)
+        clade = Leaf(taxa_index, num_taxa, node.name)
         return clade
     end
 
