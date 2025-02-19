@@ -9,7 +9,7 @@ struct CCD1 <: CCD
     splits::Set{CladeSplit}
     splits_per_clade::Dict{AbstractClade,Set{CladeSplit}}
 
-    num_clade_occurrences::Dict{Clade,Int}
+    num_clade_occurrences::Dict{AbstractClade,Int}
     num_split_occurrences::Dict{CladeSplit,Int}
 end
 
@@ -62,12 +62,12 @@ end
 # get most likely tree
 
 function get_most_likely_tree(ccd::CCD1)
-    most_likely_clades::Set{Clade} = Set([])
+    most_likely_clades::Set{AbstractClade} = Set([])
     collect_most_likely_clades!(ccd, ccd.root_clade, most_likely_clades)
     return most_likely_clades
 end
 
-function collect_most_likely_clades!(ccd::CCD1, current_clade::Clade, most_likely_clades::Set{Clade})
+function collect_most_likely_clades!(ccd::CCD1, current_clade::Clade, most_likely_clades::Set{AbstractClade})
     current_splits = ccd.splits_per_clade[current_clade]
 
     most_likely_split = argmax(split -> get_max_log_ccp(ccd, split), current_splits)
@@ -77,7 +77,9 @@ function collect_most_likely_clades!(ccd::CCD1, current_clade::Clade, most_likel
     collect_most_likely_clades!(ccd, most_likely_split.clade2, most_likely_clades)
 end
 
-function collect_most_likely_clades!(ccd::CCD1, current_clade::Leaf, most_likely_clades::Set{Clade}) end
+function collect_most_likely_clades!(ccd::CCD1, current_clade::Leaf, most_likely_clades::Set{AbstractClade})
+    push!(most_likely_clades, current_clade)
+end
 
 function get_max_log_ccp(ccd::CCD1, split::CladeSplit)
     get_log_probability(ccd, split) + get_max_log_ccp(ccd, split.clade1) + get_max_log_ccp(ccd, split.clade2)

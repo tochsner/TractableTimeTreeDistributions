@@ -9,9 +9,10 @@ function cladify_tree(tree::Tree)::CladifiedTree
     tip_indices = get_leaf_index_mapping(tree)
 
     tree_with_clades = CladifiedTree(tree, tip_indices, Set([]), Set([]))
+    
     clade_visitor = x -> push!(tree_with_clades.clades, x)
     split_visitor = x -> push!(tree_with_clades.splits, x)
-
+    
     cladify_tree(tree, clade_visitor, split_visitor)
     
     return tree_with_clades
@@ -32,8 +33,9 @@ function cladify_node(
 )
     if isleaf(node)
         taxa_index = tip_indices[node.name]
-        clade = Leaf(taxa_index, num_taxa, node.name)
-        return clade
+        leaf = Leaf(taxa_index, num_taxa, node.name)
+        clade_visitor(leaf)
+        return leaf
     end
 
     children = getchildren(node)

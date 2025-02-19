@@ -4,7 +4,7 @@
 
     cladified_tree = cladify_tree(tree[1])
 
-    @test cladified_tree.clades == Set()
+    @test cladified_tree.clades == Set([Leaf(1, 1, "A")])
     @test cladified_tree.splits == Set()
 end
 
@@ -14,7 +14,10 @@ end
 
     cladified_tree = cladify_tree(tree[1])
 
-    @test length(cladified_tree.clades) == 1
+    @test length(cladified_tree.clades) == 3
+    @test Leaf(1, 2, "A") in cladified_tree.clades
+    @test Leaf(2, 2, "B") in cladified_tree.clades
+    @test Clade([1, 2], 2) in cladified_tree.clades
     @test Clade([1, 2], 2) in cladified_tree.clades
 
     @test length(cladified_tree.splits) == 1
@@ -27,7 +30,13 @@ end
 
     cladified_tree = cladify_tree(tree[1])
 
-    @test length(cladified_tree.clades) == 3
+    @test length(cladified_tree.clades) == 7
+
+    @test Leaf(1, 4, "A") in cladified_tree.clades
+    @test Leaf(2, 4, "B") in cladified_tree.clades
+    @test Leaf(3, 4, "C") in cladified_tree.clades
+    @test Leaf(4, 4, "D") in cladified_tree.clades
+    
     @test Clade([3, 4], 4) in cladified_tree.clades
     @test Clade([2, 3, 4], 4) in cladified_tree.clades
     @test Clade([1, 2, 3, 4], 4) in cladified_tree.clades
@@ -44,7 +53,13 @@ end
 
     cladified_tree = cladify_tree(tree[1])
 
-    @test length(cladified_tree.clades) == 3
+    @test length(cladified_tree.clades) == 7
+
+    @test Leaf(1, 4, "A") in cladified_tree.clades
+    @test Leaf(2, 4, "B") in cladified_tree.clades
+    @test Leaf(3, 4, "C") in cladified_tree.clades
+    @test Leaf(4, 4, "D") in cladified_tree.clades
+    
     @test Clade([1, 2], 4) in cladified_tree.clades
     @test Clade([3, 4], 4) in cladified_tree.clades
     @test Clade([1, 2, 3, 4], 4) in cladified_tree.clades
