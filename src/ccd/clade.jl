@@ -56,8 +56,16 @@ function Base.union(clade1::AbstractClade, clade2::AbstractClade)
     Clade(clade1.bits .| clade2.bits)
 end
 
-function isLeaf(clade::AbstractClade)
+function is_leaf(clade::AbstractClade)
     sum(clade.bits) == 1
+end
+
+function is_root(clade::AbstractClade)
+    sum(clade.bits) == clade.bits.len
+end
+
+function size(clade::AbstractClade)
+    sum(clade.bits)
 end
 
 function Base.show(io::IO, clade::AbstractClade)
