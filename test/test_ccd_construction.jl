@@ -9,11 +9,11 @@
     
     @test Clade(1:2, 2) in ccd.clades
 
-    @test CladeSplit(Clade(1, 2), Clade(2, 2)) in ccd.splits
+    @test Split(Clade(1, 2), Clade(2, 2)) in ccd.splits
 
     @test ccd.num_clade_occurrences[Clade(1:2, 2)] == 1
     
-    @test ccd.num_split_occurrences[CladeSplit(Clade(1, 2), Clade(2, 2))] == 1
+    @test ccd.num_split_occurrences[Split(Clade(1, 2), Clade(2, 2))] == 1
 end
 
 @testset "create ccd with two trees and four taxa" begin
@@ -33,10 +33,10 @@ end
     @test Clade([2, 3, 4], 4) in ccd.clades
     @test Clade([1, 2, 3, 4], 4) in ccd.clades
 
-    @test CladeSplit(Clade(1, 4), Clade(2, 4)) in ccd.splits
-    @test CladeSplit(Clade(3, 4), Clade(4, 4)) in ccd.splits
-    @test CladeSplit(Clade([1, 2], 4), Clade([3, 4], 4)) in ccd.splits
-    @test CladeSplit(Clade([2, 3, 4], 4), Clade(1, 4)) in ccd.splits
+    @test Split(Clade(1, 4), Clade(2, 4)) in ccd.splits
+    @test Split(Clade(3, 4), Clade(4, 4)) in ccd.splits
+    @test Split(Clade([1, 2], 4), Clade([3, 4], 4)) in ccd.splits
+    @test Split(Clade([2, 3, 4], 4), Clade(1, 4)) in ccd.splits
 
     @test ccd.num_clade_occurrences[Clade([1, 2], 4)] == 1
     @test ccd.num_clade_occurrences[Clade([3, 4], 4)] == 2

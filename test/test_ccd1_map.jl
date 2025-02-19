@@ -10,8 +10,8 @@
 
     map_tree = get_most_likely_tree(ccd)
 
-    @test Clade(1:2, 4) in map_tree
-    @test Clade(3:4, 4) in map_tree
+    @test Clade(1:2, 4) in keys(map_tree.splits)
+    @test Clade(3:4, 4) in keys(map_tree.splits)
 end
 
 @testset "test ccd map with two other trees and four taxa" begin
@@ -26,8 +26,8 @@ end
 
     map_tree = get_most_likely_tree(ccd)
 
-    @test Clade(3:4, 4) in map_tree
-    @test Clade(2:4, 4) in map_tree
+    @test Clade(3:4, 4) in keys(map_tree.splits)
+    @test Clade(2:4, 4) in keys(map_tree.splits)
 end
 
 @testset "test ccd map with two other trees and four taxa" begin
@@ -46,9 +46,9 @@ end
 
     map_tree = get_most_likely_tree(ccd)
 
-    @test Clade(2:3, 5) in map_tree
-    @test Clade(4:5, 5) in map_tree
-    @test Clade(1:3, 5) in map_tree
+    @test Clade(2:3, 5) in keys(map_tree.splits)
+    @test Clade(4:5, 5) in keys(map_tree.splits)
+    @test Clade(1:3, 5) in keys(map_tree.splits)
 end
 
 @testset "test ccd map on bigger Yule-10 treeset" begin
@@ -58,5 +58,7 @@ end
     ccd = CCD1(reference_trees)
     map_tree = get_most_likely_tree(ccd)
 
-    @test map_tree == true_map_tree.clades
+    @test map_tree.tip_names == true_map_tree.tip_names
+    @test map_tree.root == true_map_tree.root
+    @test map_tree.splits == true_map_tree.splits
 end

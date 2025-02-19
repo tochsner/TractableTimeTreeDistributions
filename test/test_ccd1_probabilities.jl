@@ -27,12 +27,12 @@ end
 
     ccd = CCD1(trees)
 
-    @test isapprox(get_log_probability(ccd, CladeSplit(Clade(1:2, 5), Clade(3, 5))), log(3 / 7))
-    @test isapprox(get_log_probability(ccd, CladeSplit(Clade(1, 5), Clade(2:3, 5))), log(4 / 7))
+    @test isapprox(get_log_probability(ccd, Split(Clade(1:2, 5), Clade(3, 5))), log(3 / 7))
+    @test isapprox(get_log_probability(ccd, Split(Clade(1, 5), Clade(2:3, 5))), log(4 / 7))
 
-    @test isapprox(get_log_probability(ccd, CladeSplit(Clade(1:3, 5), Clade(4:5, 5))), log(3 / 7))
-    @test isapprox(get_log_probability(ccd, CladeSplit(Clade(1:4, 5), Clade(5, 5))), log(2 / 7))
-    @test isapprox(get_log_probability(ccd, CladeSplit(Clade([1, 2, 3, 5], 5), Clade(4, 5))), log(2 / 7))
+    @test isapprox(get_log_probability(ccd, Split(Clade(1:3, 5), Clade(4:5, 5))), log(3 / 7))
+    @test isapprox(get_log_probability(ccd, Split(Clade(1:4, 5), Clade(5, 5))), log(2 / 7))
+    @test isapprox(get_log_probability(ccd, Split(Clade([1, 2, 3, 5], 5), Clade(4, 5))), log(2 / 7))
     
     @test isapprox(get_log_probability(ccd, trees[1]), log(9 / 49))
     @test isapprox(get_log_probability(ccd, trees[4]), log(8 / 49))

@@ -1,26 +1,26 @@
 import Phylo
 
-function construct_tree(clades::Set{AbstractClade})::Phylo.RootedTree 
+function construct_tree(cladified_tree::CladifiedTree)::Phylo.RootedTree 
     tree = Phylo.RootedTree()
-
-    clade_to_node = Dict()
-
-    sorted_clades = sort(collect(clades), by = size, rev = true)
-
-    for clade in sorted_clades
-        if is_leaf(clade)
-            clade_to_node[clade] = Phylo.createnode!(tree, clade.name)
-        else
-            clade_to_node[clade] = Phylo.createnode!(tree, missing)
-        end
-
-        if !is_root(clade)
-            potential_parents = clade_to_node |> keys |> filter(x -> clade in x && x != clade)
-            parent = argmin(size, potential_parents)
-
-            Phylo.createbranch!(tree, clade_to_node[parent], clade_to_node[clade], parent.height - clade.height)
-        end
-    end
-
+    root_clade = cladified_tree.root
+    construct_tree!(root_clade, cladified_tree, tree)
     return tree
+end
+
+function construct_tree!(clade::Clade, cladified_tree, tree)
+    split = cladified_tree.splits[clade]
+
+    child_node1 = construct_tree!(split.clade1, cladified_tree, tree)
+    child_node2 = construct_tree!(split.clade2, cladified_tree, tree)
+    
+    clade_node = Phylo.createnode!(tree, missing)
+
+    Phylo.createbranch!(tree, clade_node, child_node1, clade.height - split.clade1.height)
+    Phylo.createbranch!(tree, clade_node, child_node2, clade.height - split.clade2.height)
+
+    return clade_node
+end
+
+function construct_tree!(clade::Leaf, cladified_tree, tree)
+    Phylo.createnode!(tree, clade.name)
 end

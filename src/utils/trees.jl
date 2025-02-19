@@ -14,8 +14,12 @@ function load_trees_from_newick(newicks::Vector{String})::Vector{Tree}
     [readnewick(newick) for newick in newicks]
 end
 
+function get_tip_names(tree::Tree)
+    tiplabels(tree) |> sort
+end
+
 function get_leaf_index_mapping(tree::Tree)
-    Dict(leaf => i for (i, leaf) in tiplabels(tree) |> sort |> enumerate)
+    Dict(leaf => i for (i, leaf) in get_tip_names(tree) |> enumerate)
 end
 
 function get_leaf_index(tree::Tree, leaf::String)
