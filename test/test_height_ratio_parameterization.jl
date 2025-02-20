@@ -3,11 +3,12 @@
     trees = load_trees_from_newick(newick)
     cladified_trees = map(cladify_tree, trees)
 
-    parameterized_trees = parameterize(HeightRatioParameterization(), cladified_trees)
+    trees_with_ratios = transform_ratios.(cladified_trees)
+    @test trees_with_ratios[1].parameters[Clade(2:4, 4)] ≈ 1 / 3
+    @test trees_with_ratios[1].parameters[Clade(3:4, 4)] ≈ 0.5
 
-    @test parameterized_trees[1].parameters[Clade(2:4, 4)] ≈ 1 / 3
-    @test parameterized_trees[1].parameters[Clade(3:4, 4)] ≈ 0.5
-    @test parameterized_trees[1].parameters[Clade(1:4, 4)] ≈ 3
+    trees_with_heights = transform_height.(cladified_trees)
+    @test trees_with_heights[1].parameters[Clade(1:4, 4)] ≈ 3
 end
 
 @testset "parameterize another tree with four taxa" begin
@@ -15,11 +16,12 @@ end
     trees = load_trees_from_newick(newick)
     cladified_trees = map(cladify_tree, trees)
 
-    parameterized_trees = parameterize(HeightRatioParameterization(), cladified_trees)
-
-    @test parameterized_trees[1].parameters[Clade(1:2, 4)] ≈ 2 / 3
-    @test parameterized_trees[1].parameters[Clade(3:4, 4)] ≈ 1 / 3
-    @test parameterized_trees[1].parameters[Clade(1:4, 4)] ≈ 3
+    trees_with_ratios = transform_ratios.(cladified_trees)
+    @test trees_with_ratios[1].parameters[Clade(1:2, 4)] ≈ 2 / 3
+    @test trees_with_ratios[1].parameters[Clade(3:4, 4)] ≈ 1 / 3
+    
+    trees_with_heights = transform_height.(cladified_trees)
+    @test trees_with_heights[1].parameters[Clade(1:4, 4)] ≈ 3
 end
 
 @testset "parameterize a tree with six taxa" begin
@@ -27,12 +29,15 @@ end
     trees = load_trees_from_newick(newick)
     cladified_trees = map(cladify_tree, trees)
 
-    parameterized_trees = parameterize(HeightRatioParameterization(), cladified_trees)
+    trees_with_ratios = transform_ratios.(cladified_trees)
 
-    @test parameterized_trees[1].parameters[Clade(1:4, 6)] ≈ 4 / 7
-    @test parameterized_trees[1].parameters[Clade(1:2, 6)] ≈ 2 / 3
-    @test parameterized_trees[1].parameters[Clade(3:4, 6)] ≈ 1 / 3
-    @test parameterized_trees[1].parameters[Clade(5:6, 6)] ≈ 2  /7
+    @test trees_with_ratios[1].parameters[Clade(1:4, 6)] ≈ 4 / 7
+    @test trees_with_ratios[1].parameters[Clade(1:2, 6)] ≈ 2 / 3
+    @test trees_with_ratios[1].parameters[Clade(3:4, 6)] ≈ 1 / 3
+    @test trees_with_ratios[1].parameters[Clade(5:6, 6)] ≈ 2 / 7
+
+    trees_with_heights = transform_height.(cladified_trees)
+    @test trees_with_heights[1].parameters[Clade(1:6, 6)] ≈ 7
 end
 
 @testset "set heights for tree with four taxa" begin
@@ -40,8 +45,14 @@ end
     trees = load_trees_from_newick(newick)
     cladified_trees = map(cladify_tree, trees)
 
-    parameterized_trees = parameterize(HeightRatioParameterization(), cladified_trees)
-    recovered_trees = set_heights!(HeightRatioParameterization(), parameterized_trees)
+    trees_with_ratios = transform_ratios.(cladified_trees)
+    trees_with_height = transform_height.(cladified_trees)
+    trees_with_both = [
+        ParameterizedTree(merge(tr.parameters, th.parameters), tr) 
+        for (tr, th) in zip(trees_with_ratios, trees_with_height)
+    ]
+
+    recovered_trees = invert_ratios.(invert_height.(trees_with_both))
 
     @test recovered_trees[1].root.height ≈ 3
     @test recovered_trees[1].splits[Clade(1:4, 4)].clade1.height ≈ 0
@@ -57,8 +68,14 @@ end
     trees = load_trees_from_newick(newick)
     cladified_trees = map(cladify_tree, trees)
 
-    parameterized_trees = parameterize(HeightRatioParameterization(), cladified_trees)
-    recovered_trees = set_heights!(HeightRatioParameterization(), parameterized_trees)
+    trees_with_ratios = transform_ratios.(cladified_trees)
+    trees_with_height = transform_height.(cladified_trees)
+    trees_with_both = [
+        ParameterizedTree(merge(tr.parameters, th.parameters), tr) 
+        for (tr, th) in zip(trees_with_ratios, trees_with_height)
+    ]
+
+    recovered_trees = invert_ratios.(invert_height.(trees_with_both))
 
     @test recovered_trees[1].root.height ≈ 3
     @test recovered_trees[1].splits[Clade(1:4, 4)].clade1.height ≈ 1
@@ -74,8 +91,14 @@ end
     trees = load_trees_from_newick(newick)
     cladified_trees = map(cladify_tree, trees)
 
-    parameterized_trees = parameterize(HeightRatioParameterization(), cladified_trees)
-    recovered_trees = set_heights!(HeightRatioParameterization(), parameterized_trees)
+    trees_with_ratios = transform_ratios.(cladified_trees)
+    trees_with_height = transform_height.(cladified_trees)
+    trees_with_both = [
+        ParameterizedTree(merge(tr.parameters, th.parameters), tr) 
+        for (tr, th) in zip(trees_with_ratios, trees_with_height)
+    ]
+
+    recovered_trees = invert_ratios.(invert_height.(trees_with_both))
 
     @test recovered_trees[1].root.height ≈ 7
     @test recovered_trees[1].splits[Clade(1:6, 6)].clade1.height ≈ 3

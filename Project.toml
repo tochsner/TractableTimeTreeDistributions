@@ -5,6 +5,7 @@ version = "0.1.0"
 
 [deps]
 DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 Memoization = "6fafb56a-5788-4b4e-91ca-c0cea6611c73"
 Phylo = "aea672f4-3940-5932-aa44-993d1c3ff149"
 PhyloNetworks = "33ad39ac-ed31-50eb-9b15-43d0656eaa72"
@@ -14,6 +15,7 @@ Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [compat]
 DataStructures = "0.18.20"
+Distributions = "0.25.117"
 Memoization = "0.2.2"
 Phylo = "0.5.4"
 PhyloNetworks = "1.0.0"

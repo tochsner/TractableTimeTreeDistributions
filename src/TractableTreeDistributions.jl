@@ -3,6 +3,7 @@ module TractableTreeDistributions
 using StatsBase
 using DataStructures
 using Memoization
+using Distributions
 
 # utils
 
@@ -24,13 +25,14 @@ export construct_tree
 
 include("utils/construct_tree.jl")
 
-# Parameterizations
+# Transformations
 
-include("parameterization/parameterized_tree.jl")
-include("parameterization/parameterization.jl")
-include("parameterization/height_ratio_parameterization.jl")
+include("transformations/parameterized_tree.jl")
+include("transformations/transform.jl")
+include("transformations/height_ratio_transform.jl")
 
-export HeightRatioParameterization
-export parameterize, set_heights!
+export ParameterizedTree
+export HeightRatioTransform, transform_height, transform_ratios, invert_height, invert_ratios
+export transform, invert
 
 end # module TractableTreeDistributions
