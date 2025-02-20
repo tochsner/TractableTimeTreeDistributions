@@ -52,12 +52,12 @@ end
 
 # get log probability
 
-function get_log_probability(ccd::CCD1, tree::Tree)
+function log_density(ccd::CCD1, tree::Tree)
     cladified_tree = cladify_tree(tree)
-    return sum(get_log_probability(ccd, split) for split in values(cladified_tree.splits))
+    return sum(log_density(ccd, split) for split in values(cladified_tree.splits))
 end
 
-function get_log_probability(ccd::CCD1, split::Split)
+function log_density(ccd::CCD1, split::Split)
     log(ccd.num_split_occurrences[split] / ccd.num_clade_occurrences[split.parent])
 end
 
@@ -83,7 +83,7 @@ function collect_most_likely_splits!(ccd::CCD1, current_clade::Leaf, most_likely
 end
 
 function get_max_log_ccp(ccd::CCD1, split::Split)
-    get_log_probability(ccd, split) + get_max_log_ccp(ccd, split.clade1) + get_max_log_ccp(ccd, split.clade2)
+    log_density(ccd, split) + get_max_log_ccp(ccd, split.clade1) + get_max_log_ccp(ccd, split.clade2)
 end
 
 function get_max_log_ccp(ccd::CCD1, clade::Clade)

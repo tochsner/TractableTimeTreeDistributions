@@ -12,8 +12,8 @@ end
 
 function invert(transformation::Transform, tree::ParameterizedTree) end
 
-function fit(transformation::Transform, trees::Vector{ParameterizedTree})
-    fit(transformation.wrapped, transform(transformation, trees))
+function fit!(transformation::Transform, trees::Vector{ParameterizedTree})
+    fit!(transformation.wrapped, transform(transformation, trees))
 end
 
 function sample(transformation::Transform, tree::CladifiedTree)::ParameterizedTree
@@ -21,5 +21,9 @@ function sample(transformation::Transform, tree::CladifiedTree)::ParameterizedTr
 end
 
 function log_density(transformation::Transform, tree::ParameterizedTree)
-    log_density(transformation.wrapped, transform(transformation, tree))
+    log_density(transformation.wrapped, transform(transformation, tree)) - log_abs_det_jacobian(transformation, tree)
+end
+
+function log_abs_det_jacobian(transformation::Transform, tree::ParameterizedTree)
+    0.0
 end

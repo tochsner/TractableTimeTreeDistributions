@@ -2,14 +2,14 @@ struct LogTransform <: Transform
     wrapped::Transform
 end
 
-function transform(transformation::Transform, tree::ParameterizedTree)
+function transform(transformation::LogTransform, tree::ParameterizedTree)
     transform(transformation.wrapped, ParameterizedTree(log.(tree.parameters), tree))
 end
 
-function invert(transformation::Transform, tree::ParameterizedTree)
+function invert(transformation::LogTransform, tree::ParameterizedTree)
     invert(transformation.wrapped, ParameterizedTree(exp.(tree.parameters), tree))
 end
 
-function log_density(transformation::Transform, tree::ParameterizedTree)
-    log_density(transformation.wrapped, transform(transformation, tree)) - sum(tree.parameters)
+function log_abs_det_jacobian(transformation::LogTransform, tree::ParameterizedTree)
+    sum(tree.parameters)
 end

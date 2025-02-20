@@ -1,114 +1,44 @@
-@testset "parameterize tree with four taxa" begin
-    newick = "(A:3,(B:2,(C:1,D:1):1):0);"
+@testset "fit on trees with four taxa" begin
+    newick = [
+        "(A:3,(B:2,(C:1,D:1):1):1);",
+        "(A:5,(B:2.5,(C:2,D:2):0.5):2.5);"
+    ]
     trees = load_trees_from_newick(newick)
     cladified_trees = map(cladify_tree, trees)
 
-    trees_with_ratios = transform_ratios.(cladified_trees)
-    @test trees_with_ratios[1].parameters[Clade(2:4, 4)] ≈ 1 / 3
-    @test trees_with_ratios[1].parameters[Clade(3:4, 4)] ≈ 0.5
+    parameterization = HeightRatioTransform(
+        IndependentDist{LogNormal}(),
+        IndependentDist{Beta}()
+    )
 
-    trees_with_heights = transform_height.(cladified_trees)
-    @test trees_with_heights[1].parameters[Clade(1:4, 4)] ≈ 3
+    fit!(parameterization, cladified_trees)
+
+    @test parameterization.height.distributions[Clade(1:4, 4)].μ ≈ (log(3) + log(5)) / 2
+    @test parameterization.height.distributions[Clade(1:4, 4)].σ ≈ sqrt(((log(3) - (log(3) + log(5)) / 2)^2 + (log(5) - (log(3) + log(5)) / 2)^2) / 1)
 end
 
-@testset "parameterize another tree with four taxa" begin
-    newick = "((A:1,B:1):2,(C:2,D:2):1):0;" 
-    trees = load_trees_from_newick(newick)
+@testset "fit on bigger Yule-10 treeset" begin
+    trees = load_trees("ref_trees.trees")
     cladified_trees = map(cladify_tree, trees)
 
-    trees_with_ratios = transform_ratios.(cladified_trees)
-    @test trees_with_ratios[1].parameters[Clade(1:2, 4)] ≈ 2 / 3
-    @test trees_with_ratios[1].parameters[Clade(3:4, 4)] ≈ 1 / 3
+    ccd = CCD1(trees)
+
+    parameterization = HeightRatioTransform(
+        IndependentDist{LogNormal}(),
+        IndependentDist{Beta}()
+    )
+    fit!(parameterization, cladified_trees)
+
+    query_trees = load_trees("query_trees.trees")
+    cladified_query_trees = map(cladify_tree, query_trees)
+
+    weight_density = log_density(parameterization, cladified_query_trees[1])
+    ccd_density = log_density(ccd, query_trees[1])
+
+    @test weight_density + ccd_density ≈ 34.464263095568896 # obtained using the java implementation
     
-    trees_with_heights = transform_height.(cladified_trees)
-    @test trees_with_heights[1].parameters[Clade(1:4, 4)] ≈ 3
-end
-
-@testset "parameterize a tree with six taxa" begin
-    newick = "((((A:1,B:1):2,(C:2,D:2):1):4,(E:5, F:5):2):0);"
-    trees = load_trees_from_newick(newick)
-    cladified_trees = map(cladify_tree, trees)
-
-    trees_with_ratios = transform_ratios.(cladified_trees)
-
-    @test trees_with_ratios[1].parameters[Clade(1:4, 6)] ≈ 4 / 7
-    @test trees_with_ratios[1].parameters[Clade(1:2, 6)] ≈ 2 / 3
-    @test trees_with_ratios[1].parameters[Clade(3:4, 6)] ≈ 1 / 3
-    @test trees_with_ratios[1].parameters[Clade(5:6, 6)] ≈ 2 / 7
-
-    trees_with_heights = transform_height.(cladified_trees)
-    @test trees_with_heights[1].parameters[Clade(1:6, 6)] ≈ 7
-end
-
-@testset "set heights for tree with four taxa" begin
-    newick = "(A:3,(B:2,(C:1,D:1):1):0);"
-    trees = load_trees_from_newick(newick)
-    cladified_trees = map(cladify_tree, trees)
-
-    trees_with_ratios = transform_ratios.(cladified_trees)
-    trees_with_height = transform_height.(cladified_trees)
-    trees_with_both = [
-        ParameterizedTree(merge(tr.parameters, th.parameters), tr) 
-        for (tr, th) in zip(trees_with_ratios, trees_with_height)
-    ]
-
-    recovered_trees = invert_ratios.(invert_height.(trees_with_both))
-
-    @test recovered_trees[1].root.height ≈ 3
-    @test recovered_trees[1].splits[Clade(1:4, 4)].clade1.height ≈ 0
-    @test recovered_trees[1].splits[Clade(1:4, 4)].clade2.height ≈ 2
-    @test recovered_trees[1].splits[Clade(2:4, 4)].clade1.height ≈ 0
-    @test recovered_trees[1].splits[Clade(2:4, 4)].clade2.height ≈ 1
-    @test recovered_trees[1].splits[Clade(3:4, 4)].clade1.height ≈ 0 
-    @test recovered_trees[1].splits[Clade(3:4, 4)].clade2.height ≈ 0 
-end
-
-@testset "set heights for another tree with four taxa" begin
-    newick = "((A:1,B:1):2,(C:2,D:2):1):0;" 
-    trees = load_trees_from_newick(newick)
-    cladified_trees = map(cladify_tree, trees)
-
-    trees_with_ratios = transform_ratios.(cladified_trees)
-    trees_with_height = transform_height.(cladified_trees)
-    trees_with_both = [
-        ParameterizedTree(merge(tr.parameters, th.parameters), tr) 
-        for (tr, th) in zip(trees_with_ratios, trees_with_height)
-    ]
-
-    recovered_trees = invert_ratios.(invert_height.(trees_with_both))
-
-    @test recovered_trees[1].root.height ≈ 3
-    @test recovered_trees[1].splits[Clade(1:4, 4)].clade1.height ≈ 1
-    @test recovered_trees[1].splits[Clade(1:4, 4)].clade2.height ≈ 2
-    @test recovered_trees[1].splits[Clade(1:2, 4)].clade1.height ≈ 0
-    @test recovered_trees[1].splits[Clade(1:2, 4)].clade2.height ≈ 0
-    @test recovered_trees[1].splits[Clade(3:4, 4)].clade1.height ≈ 0 
-    @test recovered_trees[1].splits[Clade(3:4, 4)].clade2.height ≈ 0 
-end
-
-@testset "set heights for a tree with six taxa" begin
-    newick = "((((A:1,B:1):2,(C:2,D:2):1):4,(E:5, F:5):2):0);"
-    trees = load_trees_from_newick(newick)
-    cladified_trees = map(cladify_tree, trees)
-
-    trees_with_ratios = transform_ratios.(cladified_trees)
-    trees_with_height = transform_height.(cladified_trees)
-    trees_with_both = [
-        ParameterizedTree(merge(tr.parameters, th.parameters), tr) 
-        for (tr, th) in zip(trees_with_ratios, trees_with_height)
-    ]
-
-    recovered_trees = invert_ratios.(invert_height.(trees_with_both))
-
-    @test recovered_trees[1].root.height ≈ 7
-    @test recovered_trees[1].splits[Clade(1:6, 6)].clade1.height ≈ 3
-    @test recovered_trees[1].splits[Clade(1:6, 6)].clade2.height ≈ 5
-    @test recovered_trees[1].splits[Clade(1:4, 6)].clade1.height ≈ 1
-    @test recovered_trees[1].splits[Clade(1:4, 6)].clade2.height ≈ 2
-    @test recovered_trees[1].splits[Clade(1:2, 6)].clade1.height ≈ 0
-    @test recovered_trees[1].splits[Clade(1:2, 6)].clade2.height ≈ 0
-    @test recovered_trees[1].splits[Clade(3:4, 6)].clade1.height ≈ 0
-    @test recovered_trees[1].splits[Clade(3:4, 6)].clade2.height ≈ 0
-    @test recovered_trees[1].splits[Clade(5:6, 6)].clade1.height ≈ 0
-    @test recovered_trees[1].splits[Clade(5:6, 6)].clade1.height ≈ 0
+    weight_density = log_density(parameterization, cladified_query_trees[2])
+    ccd_density = log_density(ccd, query_trees[2])
+    
+    @test weight_density + ccd_density ≈ 36.63401964278324 # obtained using the java implementation
 end

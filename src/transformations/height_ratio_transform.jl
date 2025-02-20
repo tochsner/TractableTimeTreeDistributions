@@ -3,9 +3,9 @@ struct HeightRatioTransform <: Transform
     ratios::Transform
 end
 
-function fit(transformation::HeightRatioTransform, trees::Vector{CladifiedTree})
-    fit(transformation.height, transform_height.(trees))
-    fit(transformation.ratios, transform_ratios.(trees))
+function fit!(transformation::HeightRatioTransform, trees::Vector{CladifiedTree})
+    fit!(transformation.height, transform_height.(trees))
+    fit!(transformation.ratios, transform_ratios.(trees))
 end
 
 function sample(transformation::HeightRatioTransform, tree::CladifiedTree)::ParameterizedTree
@@ -18,11 +18,22 @@ function log_density(transformation::HeightRatioTransform, tree::CladifiedTree)
     (
         log_density(transformation.height, transform_height(tree)) + 
         log_density(transformation.ratios, transform_ratios(tree))
-    )
+    ) + log_abs_det_jacobian(transformation, tree)
 end
+function log_abs_det_jacobian(transformation::HeightRatioTransform, tree::CladifiedTree)
+    log_abs_det_jacobian = 0.0
 
-function transform(::HeightRatioTransform, tree::CladifiedTree)::ParameterizedTree
-    tree |> transform_height |> transform_ratios
+    for split in values(tree.splits)
+        if !is_leaf(split.clade1)
+            log_abs_det_jacobian -= log(split.parent.height)
+        end
+        
+        if !is_leaf(split.clade2)
+            log_abs_det_jacobian -= log(split.parent.height)
+        end
+    end
+
+    return log_abs_det_jacobian
 end
 
 function transform_height(tree::CladifiedTree)::ParameterizedTree
@@ -65,7 +76,3 @@ function set_height_from_ratios!(parameterized_tree::ParameterizedTree, clade::C
     set_height_from_ratios!(parameterized_tree, split.clade2, clade.height)
 end
 function set_height_from_ratios!(parameterized_tree::ParameterizedTree, clade::Leaf, parent_height::Float64) end
-
-function log_density(transform::HeightRatioTransform, tree::ParameterizedTree)
-    log_density(transform.wrapped, transform(transform, tree)) # TODO multiply with jacobian
-end
