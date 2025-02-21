@@ -10,10 +10,10 @@ function HeightRatioDist{H, R}(trees::Vector{CladifiedTree}) where {H, R}
     )
 end
 
-function sample(distribution::HeightRatioDist, tree::CladifiedTree)::ParameterizedTree
+function sample(distribution::HeightRatioDist, tree::CladifiedTree)::CladifiedTree
     sampled_tree = sample(distribution.height, tree)
     sampled_tree = sample(distribution.ratios, sampled_tree)
-    return (invert_height ∘ invert_ratios)(sampled_tree)
+    return (invert_height ∘ invert_ratios)(sampled_tree) |> to_cladified_tree
 end
 
 function log_density(distribution::HeightRatioDist, tree::CladifiedTree)
