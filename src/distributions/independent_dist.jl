@@ -25,7 +25,7 @@ function IndependentDist{D}(trees::Vector{ParameterizedTree}) where D
     return IndependentDist{D}(distributions)
 end
 
-function sample(distribution::IndependentDist{D}, tree::CladifiedTree)::ParameterizedTree where D
+function sample_tree(distribution::IndependentDist{D}, tree::Union{CladifiedTree,ParameterizedTree})::Union{CladifiedTree,ParameterizedTree} where D
     parameters = Dict(
         clade => rand(dist) for (clade, dist) in distribution.distributions
     )

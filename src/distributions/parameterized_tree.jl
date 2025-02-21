@@ -10,7 +10,7 @@ function ParameterizedTree(parameters::Dict{Clade,Float64}, cladified_tree::Clad
 end
 
 function ParameterizedTree(new_parameters::Dict{Clade,Float64}, tree::ParameterizedTree)
-    ParameterizedTree(tree.tip_names, tree.root, tree.splits, new_parameters)
+    ParameterizedTree(tree.tip_names, tree.root, tree.splits, merge(tree.parameters, new_parameters))
 end
 
 function to_cladified_tree(parameterized_tree::ParameterizedTree)::CladifiedTree

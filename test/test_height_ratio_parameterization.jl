@@ -27,3 +27,14 @@ end
     density = log_density(distribution, query_trees[2])
     @test density ≈ 36.63401964278324 # obtained using the java implementation
 end
+
+@testset "fit on bigger Yule-10 treeset and sample" begin
+    trees = load_trees("ref_trees.trees")
+
+    distribution = TractableTimeTreeDist{
+        CCD1, 
+        HeightRatioDist{IndependentDist{LogNormal},IndependentDist{Beta}}
+    }(trees)
+
+    sample_tree(distribution)
+end

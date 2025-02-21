@@ -93,21 +93,21 @@ end
 
 # sample tree
 
-function sample(ccd::CCD1)
-    sampled_clades::Set{Clade} = Set([])
-    collect_sampled_clades!(ccd, ccd.root_clade, sampled_clades)
-    return sampled_clades
+function sample_tree(ccd::CCD1)
+    sampled_splits::Dict{Clade,Split} = Dict()
+    collect_sampled_splits!(ccd, ccd.root_clade, sampled_splits)
+    return CladifiedTree(ccd.tip_names, ccd.root_clade, sampled_splits)
 end
 
-function collect_sampled_clades!(ccd::CCD1, current_clade::Clade, sampled_clades::Set{Clade})
+function collect_sampled_splits!(ccd::CCD1, current_clade::Clade, sampled_splits::Dict{Clade,Split})
     current_splits = collect(ccd.splits_per_clade[current_clade])
     weights = AnalyticWeights([get_max_log_ccp(ccd, split) for split in current_splits])
 
     sampled_split = StatsBase.sample(current_splits, weights)
-    push!(sampled_clades, sampled_split.parent)
+    sampled_splits[sampled_split.parent] = sampled_split
 
-    collect_sampled_clades!(ccd, sampled_split.clade1, sampled_clades)
-    collect_sampled_clades!(ccd, sampled_split.clade2, sampled_clades)
+    collect_sampled_splits!(ccd, sampled_split.clade1, sampled_splits)
+    collect_sampled_splits!(ccd, sampled_split.clade2, sampled_splits)
 end
 
-function collect_sampled_clades!(ccd::CCD1, current_clade::Leaf, sampled_clades::Set{Clade}) end
+function collect_sampled_splits!(ccd::CCD1, current_clade::Leaf, sampled_splits::Dict{Clade,Split}) end

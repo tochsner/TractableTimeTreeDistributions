@@ -24,3 +24,7 @@ end
 function construct_tree!(clade::Leaf, cladified_tree, tree)
     Phylo.createnode!(tree, clade.name)
 end
+
+function write_tree(path::String, cladified_tree::CladifiedTree)
+    Phylo.write(path, construct_tree(cladified_tree), format = Phylo.Nexus())
+end

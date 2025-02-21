@@ -15,9 +15,9 @@ function log_density(distribution::TractableTimeTreeDist{Topopolgy,Times}, tree:
     return log_density(distribution.topology, cladified_tree) + log_density(distribution.times, cladified_tree)
 end
 
-function sample(distribution::TractableTimeTreeDist{Topopolgy,Times})::CladifiedTree where {Topopolgy,Times}
-    sample(
+function sample_tree(distribution::TractableTimeTreeDist{Topopolgy,Times})::CladifiedTree where {Topopolgy,Times}
+    sample_tree(
         distribution.times,
-        sample(distribution.topology)
+        sample_tree(distribution.topology)
     )
 end

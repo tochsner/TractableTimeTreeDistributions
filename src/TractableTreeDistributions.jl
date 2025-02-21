@@ -9,7 +9,7 @@ using Distributions
 
 include("utils/trees.jl")
 
-export load_trees, load_trees_from_newick
+export load_trees, load_trees_from_newick, write_tree
 
 # Clades
 
@@ -18,7 +18,7 @@ include("clades/clade_split.jl")
 include("clades/cladify_tree.jl")
 
 export AbstractClade, Leaf, Clade, Split, TreeWithClades, cladify_tree
-export CCD1, fit, sample, log_density, most_likely_tree
+export CCD1, fit, log_density, most_likely_tree
 
 export construct_tree
 
@@ -35,7 +35,6 @@ include("distributions/tractable_time_tree_dist.jl")
 
 export ParameterizedTree, TractableTimeTreeDist
 export HeightRatioDist, transform_height, transform_ratios, invert_height, invert_ratios
-export IndependentDist
-export transform, invert, fit!, sample, log_density
+export IndependentDist, sample_tree
 
 end # module TractableTreeDistributions
