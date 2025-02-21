@@ -1,6 +1,4 @@
-abstract type CCD end
-
-struct CCD1 <: CCD
+struct CCD1 <: AbstractDistribution
     num_taxa::Int
     num_trees::Int
 
@@ -52,9 +50,8 @@ end
 
 # get log probability
 
-function log_density(ccd::CCD1, tree::Tree)
-    cladified_tree = cladify_tree(tree)
-    return sum(log_density(ccd, split) for split in values(cladified_tree.splits))
+function log_density(ccd::CCD1, cladified_tree::CladifiedTree)
+    sum(log_density(ccd, split) for split in values(cladified_tree.splits))
 end
 
 function log_density(ccd::CCD1, split::Split)
@@ -63,7 +60,7 @@ end
 
 # get most likely tree
 
-function get_most_likely_tree(ccd::CCD1)
+function most_likely_tree(ccd::CCD1)
     most_likely_splits::Dict{Clade,Split} = Dict()
     collect_most_likely_splits!(ccd, ccd.root_clade, most_likely_splits)
     return CladifiedTree(ccd.tip_names, ccd.root_clade, most_likely_splits)

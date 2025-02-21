@@ -1,45 +1,32 @@
-struct HeightRatioTransform <: Transform
-    height::Transform
-    ratios::Transform
+struct HeightRatioDist{H, R} <: AbstractDistribution
+    height::AbstractDistribution
+    ratios::AbstractDistribution
 end
 
-function fit!(transformation::HeightRatioTransform, trees::Vector{CladifiedTree})
-    fit!(transformation.height, transform_height.(trees))
-    fit!(transformation.ratios, transform_ratios.(trees))
+function HeightRatioDist{H, R}(trees::Vector{CladifiedTree}) where {H, R}
+    HeightRatioDist{H, R}(
+        H(transform_height.(trees)),
+        R(transform_ratios.(trees))
+    )
 end
 
-function sample(transformation::HeightRatioTransform, tree::CladifiedTree)::ParameterizedTree
-    sampled_tree = sample(transformation.height, tree)
-    sampled_tree = sample(transformation.ratios, sampled_tree)
+function sample(distribution::HeightRatioDist, tree::CladifiedTree)::ParameterizedTree
+    sampled_tree = sample(distribution.height, tree)
+    sampled_tree = sample(distribution.ratios, sampled_tree)
     return (invert_height ∘ invert_ratios)(sampled_tree)
 end
 
-function log_density(transformation::HeightRatioTransform, tree::CladifiedTree)
+function log_density(distribution::HeightRatioDist, tree::CladifiedTree)
     (
-        log_density(transformation.height, transform_height(tree)) + 
-        log_density(transformation.ratios, transform_ratios(tree))
-    ) + log_abs_det_jacobian(transformation, tree)
-end
-function log_abs_det_jacobian(transformation::HeightRatioTransform, tree::CladifiedTree)
-    log_abs_det_jacobian = 0.0
-
-    for split in values(tree.splits)
-        if !is_leaf(split.clade1)
-            log_abs_det_jacobian -= log(split.parent.height)
-        end
-        
-        if !is_leaf(split.clade2)
-            log_abs_det_jacobian -= log(split.parent.height)
-        end
-    end
-
-    return log_abs_det_jacobian
+        log_density(distribution.height, transform_height(tree)) + 
+        log_density(distribution.ratios, transform_ratios(tree)) +
+        log_abs_det_jacobian(distribution, tree)
+    )
 end
 
 function transform_height(tree::CladifiedTree)::ParameterizedTree
     ParameterizedTree(Dict(tree.root => tree.root.height), tree)
 end
-
 function transform_ratios(tree::CladifiedTree)::ParameterizedTree
     parameters = Dict{Clade, Float64}()
 
@@ -54,6 +41,21 @@ function transform_ratios(tree::CladifiedTree)::ParameterizedTree
     end
 
     return ParameterizedTree(parameters, tree)
+end
+function log_abs_det_jacobian(distribution::HeightRatioDist, tree::CladifiedTree)
+    log_abs_det_jacobian = 0.0
+
+    for split in values(tree.splits)
+        if !is_leaf(split.clade1)
+            log_abs_det_jacobian -= log(split.parent.height)
+        end
+        
+        if !is_leaf(split.clade2)
+            log_abs_det_jacobian -= log(split.parent.height)
+        end
+    end
+
+    return log_abs_det_jacobian
 end
 
 function invert_height(tree::ParameterizedTree)::ParameterizedTree
