@@ -1,2 +1,0 @@
-abstract type Distribution end
-abstract type EstimatedDistribution end

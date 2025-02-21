@@ -11,11 +11,11 @@ include("utils/trees.jl")
 
 export load_trees, load_trees_from_newick
 
-# CCD
+# Clades
 
-include("ccd/clade.jl")
-include("ccd/clade_split.jl")
-include("ccd/cladify_tree.jl")
+include("clades/clade.jl")
+include("clades/clade_split.jl")
+include("clades/cladify_tree.jl")
 
 export AbstractClade, Leaf, Clade, Split, TreeWithClades, cladify_tree
 export CCD1, fit, sample, log_density, most_likely_tree
