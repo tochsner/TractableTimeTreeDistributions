@@ -11,8 +11,11 @@ function TractableTimeTreeDist{Topopolgy,Times}(trees::Vector{Tree}) where {Topo
 end
 
 function log_density(distribution::TractableTimeTreeDist{Topopolgy,Times}, tree::Tree) where {Topopolgy,Times}
-    cladified_tree = cladify_tree(tree)
-    return log_density(distribution.topology, cladified_tree) + log_density(distribution.times, cladified_tree)
+    log_density(distribution, cladify_tree(tree))
+end
+
+function log_density(distribution::TractableTimeTreeDist{Topopolgy,Times}, cladified_tree::CladifiedTree) where {Topopolgy,Times}
+    log_density(distribution.topology, cladified_tree) + log_density(distribution.times, cladified_tree)
 end
 
 function sample_tree(distribution::TractableTimeTreeDist{Topopolgy,Times})::CladifiedTree where {Topopolgy,Times}

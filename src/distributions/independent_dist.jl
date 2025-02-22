@@ -2,7 +2,7 @@ struct IndependentDist{D} <: AbstractDistribution
     distributions::Dict{Clade,D}
 end
 
-function IndependentDist{D}(trees::Vector{ParameterizedTree}) where D
+function IndependentDist{D}(trees::Vector{CladifiedTree}) where D
     observations = DefaultDict{Clade,Vector{Float64}}([])
 
     for tree in trees
@@ -25,13 +25,13 @@ function IndependentDist{D}(trees::Vector{ParameterizedTree}) where D
     return IndependentDist{D}(distributions)
 end
 
-function sample_tree(distribution::IndependentDist{D}, tree::Union{CladifiedTree,ParameterizedTree})::Union{CladifiedTree,ParameterizedTree} where D
+function sample_tree(distribution::IndependentDist{D}, tree::Union{CladifiedTree,CladifiedTree})::Union{CladifiedTree,CladifiedTree} where D
     parameters = Dict(
         clade => rand(dist) for (clade, dist) in distribution.distributions
     )
-    return ParameterizedTree(parameters, tree)
+    return CladifiedTree(parameters, tree)
 end
 
-function log_density(distribution::IndependentDist{D}, tree::ParameterizedTree) where D
+function log_density(distribution::IndependentDist{D}, tree::CladifiedTree) where D
     sum(logpdf(distribution.distributions[clade], param) for (clade, param) in tree.parameters)
 end

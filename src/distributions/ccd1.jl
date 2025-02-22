@@ -21,7 +21,7 @@ function CCD1(trees::Vector{Tree})
     clades = Set()
     num_clade_occurrences = DefaultDict(0)
     
-    function clade_visitor(clade)
+    function clade_visitor(clade, height)
         push!(clades, clade)
         num_clade_occurrences[clade] += 1
     end
@@ -63,7 +63,7 @@ end
 function most_likely_tree(ccd::CCD1)
     most_likely_splits::Dict{Clade,Split} = Dict()
     collect_most_likely_splits!(ccd, ccd.root_clade, most_likely_splits)
-    return CladifiedTree(ccd.tip_names, ccd.root_clade, most_likely_splits)
+    return CladifiedTree(ccd.tip_names, ccd.root_clade, most_likely_splits, Dict())
 end
 
 function collect_most_likely_splits!(ccd::CCD1, current_clade::Clade, most_likely_splits::Dict{Clade,Split})
@@ -96,7 +96,7 @@ end
 function sample_tree(ccd::CCD1)
     sampled_splits::Dict{Clade,Split} = Dict()
     collect_sampled_splits!(ccd, ccd.root_clade, sampled_splits)
-    return CladifiedTree(ccd.tip_names, ccd.root_clade, sampled_splits)
+    return CladifiedTree(ccd.tip_names, ccd.root_clade, sampled_splits, Dict())
 end
 
 function collect_sampled_splits!(ccd::CCD1, current_clade::Clade, sampled_splits::Dict{Clade,Split})
