@@ -2,6 +2,7 @@ using TractableTreeDistributions
 using Test
 using Distributions
 
+include("test_short_branch_transform.jl")
 include("test_height_ratio_parameterization.jl")
 include("test_height_ratio_transform.jl")
 include("test_tree_construction.jl")

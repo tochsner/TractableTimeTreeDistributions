@@ -32,31 +32,39 @@ function plot_rank_uniformity(distribution_constructors, tree_file)
     ecdfs = get_ecdf.(distribution_constructors, Ref(ref_trees))
 
     @info "Plot ECDFs"
-    plot(ecdfs)
+    plot(ecdfs, label = string.(typeof.(distribution_constructors)))
     plot!([0, length(ecdfs[1])], [0, 1.0]; c = :black, lw = 1)
 end
 
 distributions = [
-    CCD1,
+    # CCD1,
+    # TractableTimeTreeDist{
+    #     CCD1,
+    #     HeightRatioDist{IndependentDist{LogNormal},IndependentDist{LogitNormal}}
+    # },
+    # TractableTimeTreeDist{
+    #     CCD1,
+    #     HeightRatioDist{IndependentDist{LogNormal},IndependentDist{Beta}}
+    # },
+    # TractableTimeTreeDist{
+    #     CCD1,
+    #     HeightRatioDist{IndependentDist{Gamma},IndependentDist{LogitNormal}}
+    # },
+    # TractableTimeTreeDist{
+    #     CCD1,
+    #     HeightRatioDist{IndependentDist{Gamma},IndependentDist{Beta}}
+    # },
     TractableTimeTreeDist{
         CCD1,
-        HeightRatioDist{IndependentDist{LogNormal},IndependentDist{LogitNormal}}
+        ShorterBranchDist{IndependentDist{LogNormal}}
     },
     TractableTimeTreeDist{
         CCD1,
-        HeightRatioDist{IndependentDist{LogNormal},IndependentDist{Beta}}
-    },
-    TractableTimeTreeDist{
-        CCD1,
-        HeightRatioDist{IndependentDist{Gamma},IndependentDist{LogitNormal}}
-    },
-    TractableTimeTreeDist{
-        CCD1,
-        HeightRatioDist{IndependentDist{Gamma},IndependentDist{Beta}}
+        ShorterBranchDist{IndependentDist{Gamma}}
     },
 ]
 
 plot_rank_uniformity(
     distributions,
-    "/Users/tobiaochsner/Documents/Thesis/Validation/data/mcmc_runs/yule-100_1.trees"
+    "/Users/tobiaochsner/Documents/Thesis/Validation/data/mcmc_runs/yule-10_50.trees"
 )
