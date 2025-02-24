@@ -101,7 +101,7 @@ end
 
 function collect_sampled_splits!(ccd::CCD1, current_clade::Clade, sampled_splits::Dict{Clade,Split})
     current_splits = collect(ccd.splits_per_clade[current_clade])
-    weights = AnalyticWeights([get_max_log_ccp(ccd, split) for split in current_splits])
+    weights = AnalyticWeights([exp(log_density(ccd, split)) for split in current_splits])
 
     sampled_split = StatsBase.sample(current_splits, weights)
     sampled_splits[sampled_split.parent] = sampled_split

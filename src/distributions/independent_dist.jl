@@ -15,10 +15,15 @@ function IndependentDist{D}(trees::Vector{CladifiedTree}) where D
 
     distributions::Dict{Clade,D} = Dict()
     for (clade, clade_observations) in observations
-        if length(clade_observations) < 3
+        if length(clade_observations) < 5
             distributions[clade] = global_distribution
         else
-            distributions[clade] = fit_mle(D, clade_observations)
+            try
+                distributions[clade] = fit_mle(D, clade_observations)
+            catch
+                @info "MLE not working"
+                distributions[clade] = fit(D, clade_observations)
+            end
         end
     end
 
