@@ -34,6 +34,7 @@ include("distributions/ccd1.jl")
 include("distributions/tractable_time_tree_dist.jl")
 
 export CladifiedTree, TractableTimeTreeDist
+export LastDivergenceBranchDist, transform_last_div, transform_branches
 export HeightRatioDist, transform_height, transform_ratios, invert_height, invert_ratios, transform_short_branches, invert_short_branches, ShorterBranchDist
 export IndependentDist, sample_tree
 

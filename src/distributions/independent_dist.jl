@@ -38,5 +38,10 @@ function sample_tree(distribution::IndependentDist{D}, tree::Union{CladifiedTree
 end
 
 function log_density(distribution::IndependentDist{D}, tree::CladifiedTree) where D
+    # for (clade, param) in tree.parameters
+    #     print(logpdf(distribution.distributions[clade], param))
+    #     print(" ")
+    #     println(param)
+    # end
     sum(logpdf(distribution.distributions[clade], param) for (clade, param) in tree.parameters)
 end

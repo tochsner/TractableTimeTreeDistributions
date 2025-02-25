@@ -11,7 +11,7 @@ function sample_tree(distribution::ShorterBranchDist, tree::CladifiedTree)::Clad
 end
 
 function log_density(distribution::ShorterBranchDist, tree::CladifiedTree)
-    log_density(distribution.branches, invert_short_branches(tree))
+    log_density(distribution.branches, transform_short_branches(tree))
 end
 
 function transform_short_branches(tree::CladifiedTree)::CladifiedTree
