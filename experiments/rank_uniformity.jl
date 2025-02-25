@@ -37,7 +37,7 @@ function plot_rank_uniformity(distribution_constructors, tree_file)
 end
 
 distributions = [
-    CCD1,
+    # CCD1,
     TractableTimeTreeDist{
         CCD1,
         HeightRatioDist{IndependentDist{LogNormal},IndependentDist{LogitNormal}}
@@ -52,11 +52,11 @@ distributions = [
     },
     TractableTimeTreeDist{
         CCD1,
-        ShorterBranchDist{IndependentDist{Gamma}}
+        LastDivergenceBranchDist{IndependentDist{LogNormal}, IndependentDist{LogNormal}}
     },
 ]
 
 plot_rank_uniformity(
     distributions,
-    "/Users/tobiaochsner/Documents/Thesis/Validation/data/mcmc_runs/yule-50_12.trees"
+    "/Users/tobiaochsner/Documents/Thesis/Test Hipstr/trees/pny10.fixed.cov.ucln.bdsky.ba-sp.trees"
 )
