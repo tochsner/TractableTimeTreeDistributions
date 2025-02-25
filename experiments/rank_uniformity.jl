@@ -40,23 +40,23 @@ distributions = [
     # CCD1,
     TractableTimeTreeDist{
         CCD1,
-        HeightRatioDist{IndependentDist{LogNormal},IndependentDist{LogitNormal}}
+        HeightRatioDist{IndependentDist{LogNormal},MultivariateDist{MvLogitNormal}}
     },
-    TractableTimeTreeDist{
-        CCD1,
-        HeightRatioDist{IndependentDist{LogNormal},IndependentDist{Beta}}
-    },
-    TractableTimeTreeDist{
-        CCD1,
-        ShorterBranchDist{IndependentDist{LogNormal}}
-    },
-    TractableTimeTreeDist{
-        CCD1,
-        LastDivergenceBranchDist{IndependentDist{LogNormal}, IndependentDist{LogNormal}}
-    },
+    # TractableTimeTreeDist{
+    #     CCD1,
+    #     HeightRatioDist{IndependentDist{LogNormal},IndependentDist{Beta}}
+    # },
+    # TractableTimeTreeDist{
+    #     CCD1,
+    #     ShorterBranchDist{IndependentDist{LogNormal}}
+    # },
+    # TractableTimeTreeDist{
+    #     CCD1,
+    #     LastDivergenceBranchDist{IndependentDist{LogNormal}, IndependentDist{LogNormal}}
+    # },
 ]
 
 plot_rank_uniformity(
     distributions,
-    "/Users/tobiaochsner/Documents/Thesis/Test Hipstr/trees/pny10.fixed.cov.ucln.bdsky.ba-sp.trees"
+    "/Users/tobiaochsner/Documents/Thesis/Validation/data/mcmc_runs/yule-10_67.trees"
 )
