@@ -6,6 +6,10 @@ function ShorterBranchDist{B}(trees::Vector{CladifiedTree}) where {B}
     ShorterBranchDist{B}(B(transform_short_branches.(trees)))
 end
 
+function readable_name(distribution::Type{ShorterBranchDist{B}}) where {B}
+    "Shortest Branch ($(readable_name(B)))"
+end
+
 function sample_tree(distribution::ShorterBranchDist, tree::CladifiedTree)::CladifiedTree
     sample_tree(distribution.branches, tree) |> invert_short_branches
 end

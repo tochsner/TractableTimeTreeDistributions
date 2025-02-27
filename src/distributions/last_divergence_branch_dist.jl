@@ -10,6 +10,10 @@ function LastDivergenceBranchDist{D,B}(trees::Vector{CladifiedTree}) where {D,B}
     )
 end
 
+function readable_name(distribution::Type{LastDivergenceBranchDist{D,B}}) where {D,B}
+    "Last Divergence ($(readable_name(D))), Branches ($(readable_name(B)))"
+end
+
 function sample_tree(distribution::LastDivergenceBranchDist, tree::CladifiedTree)::CladifiedTree
     sampled_tree_with_branches = sample_tree(distribution.branches, tree)
     sampled_tree_with_last_div = sample_tree(distribution.last_div, tree)

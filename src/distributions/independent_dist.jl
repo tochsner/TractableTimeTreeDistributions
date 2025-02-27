@@ -30,6 +30,10 @@ function IndependentDist{D}(trees::Vector{CladifiedTree}) where D
     return IndependentDist{D}(distributions)
 end
 
+function readable_name(distribution::Type{IndependentDist{D}}) where D
+    readable_name(D)
+end
+
 function sample_tree(distribution::IndependentDist{D}, tree::Union{CladifiedTree,CladifiedTree})::Union{CladifiedTree,CladifiedTree} where D
     parameters = Dict(
         clade => rand(dist) for (clade, dist) in distribution.distributions

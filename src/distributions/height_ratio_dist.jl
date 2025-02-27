@@ -10,6 +10,10 @@ function HeightRatioDist{H,R}(trees::Vector{CladifiedTree}) where {H,R}
     )
 end
 
+function readable_name(distribution::Type{HeightRatioDist{H, R}}) where {H, R}
+    "Height ($(readable_name(H))), Ratios ($(readable_name(R)))"
+end
+
 function sample_tree(distribution::HeightRatioDist, tree::CladifiedTree)::CladifiedTree
     sampled_tree_with_height = sample_tree(distribution.height, tree)
     sampled_tree_with_ratios = sample_tree(distribution.ratios, tree)

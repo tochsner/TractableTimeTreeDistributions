@@ -20,7 +20,7 @@ function CCD1(trees::Vector{Tree})
 
     clades = Set()
     num_clade_occurrences = DefaultDict(0)
-    
+
     function clade_visitor(clade, height)
         push!(clades, clade)
         num_clade_occurrences[clade] += 1
@@ -33,7 +33,7 @@ function CCD1(trees::Vector{Tree})
     function split_visitor(split)
         push!(splits, split)
         push!(splits_per_clade[split.parent], split)
-        
+
         if !(split.clade1 in split.parent) || !(split.clade2 in split.parent)
             throw("Not a child")
         end
@@ -111,3 +111,7 @@ function collect_sampled_splits!(ccd::CCD1, current_clade::Clade, sampled_splits
 end
 
 function collect_sampled_splits!(ccd::CCD1, current_clade::Leaf, sampled_splits::Dict{Clade,Split}) end
+
+function readable_name(ccd::Type{CCD1})
+    "CCD1"
+end

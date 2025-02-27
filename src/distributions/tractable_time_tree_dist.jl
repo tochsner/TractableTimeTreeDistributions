@@ -10,6 +10,10 @@ function TractableTimeTreeDist{Topopolgy,Times}(trees::Vector{Tree}) where {Topo
     )
 end
 
+function readable_name(distribution::Type{TractableTimeTreeDist{Topopolgy,Times}}) where {Topopolgy,Times}
+    "$(readable_name(Topopolgy))\n$(readable_name(Times))"
+end
+
 function log_density(distribution::TractableTimeTreeDist{Topopolgy,Times}, tree::Tree) where {Topopolgy,Times}
     log_density(distribution, cladify_tree(tree))
 end
