@@ -16,10 +16,10 @@ function plot_get_data_likelihood(distributions, tree_file)
     @info "Load reference trees"
     ref_trees = load_trees(tree_file)
 
-    @info "Get data likelohoods"
+    @info "Get data likelihoods"
     data_likelihoods = get_data_likelihood.(distributions, Ref(ref_trees))
 
-    @info "Plot data likelohoods"
+    @info "Plot data likelihoods"
     n = length(data_likelihoods)
     palette = cgrad(:roma);
     plot(
