@@ -21,15 +21,19 @@ function plot_get_data_likelihood(distributions, tree_file)
 
     @info "Plot data likelihoods"
     n = length(data_likelihoods)
-    palette = cgrad(:roma);
+    palette = cgrad(:Set2_8);
     plot(
-        size=(750, 500),
+        size=(500, 400),
         xticks=false,
         xticklabels=false,
         legend=:outerbottom,
+    )
+    bar!(
+        (1:n)', 
+        data_likelihoods', 
+        label=permutedims(readable_name.(distributions)),
         color=palette[1:n]',
     )
-    bar!((1:n)', data_likelihoods', label=permutedims(readable_name.(distributions)))
     ylabel!("Log Data Likelihood")
 end
 
@@ -62,5 +66,5 @@ distributions = [
 
 plot_get_data_likelihood(
     distributions,
-    "/Users/tobiaochsner/Documents/Thesis/Validation/data/mcmc_runs/yule-50_1.trees"
+    "/Users/tobiaochsner/Documents/Thesis/Validation/data/mcmc_runs/yule-10_1.trees"
 )
