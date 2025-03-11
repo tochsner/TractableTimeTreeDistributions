@@ -40,14 +40,6 @@ end
 distributions = [
     TractableTimeTreeDist{
         CCD1,
-        HeightRatioDist{IndependentDist{LogNormal},IndependentDist{LogitNormal}}
-    },
-    TractableTimeTreeDist{
-        CCD1,
-        HeightRatioDist{IndependentDist{LogNormal},IndependentDist{Beta}}
-    },
-    TractableTimeTreeDist{
-        CCD1,
         ShorterBranchDist{IndependentDist{LogNormal}}
     },
     TractableTimeTreeDist{
@@ -56,15 +48,23 @@ distributions = [
     },
     TractableTimeTreeDist{
         CCD1,
+        ShorterBranchDist{IndependentDist{Weibull}}
+    },
+    TractableTimeTreeDist{
+        CCD1,
         LastDivergenceBranchDist{IndependentDist{LogNormal},IndependentDist{LogNormal}}
     },
     TractableTimeTreeDist{
         CCD1,
-        LastDivergenceBranchDist{IndependentDist{Gamma},IndependentDist{Gamma}}
+        LastDivergenceBranchDist{IndependentDist{LogNormal},IndependentDist{Gamma}}
+    },
+    TractableTimeTreeDist{
+        CCD1,
+        LastDivergenceBranchDist{IndependentDist{LogNormal},IndependentDist{Weibull}}
     }
 ]
 
 plot_get_data_likelihood(
     distributions,
-    "/Users/tobiaochsner/Documents/Thesis/Validation/data/mcmc_runs/yule-10_1.trees"
+    "/Users/tobiaochsner/Documents/Thesis/Validation/data/mcmc_runs/yule-50_1.trees"
 )
