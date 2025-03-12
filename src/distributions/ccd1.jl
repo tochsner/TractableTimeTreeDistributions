@@ -19,18 +19,18 @@ function CCD1(trees::Vector{Tree})
     root_clade = Clade(1:num_taxa, num_taxa)
 
     clades = Set()
-    num_clade_occurrences = DefaultDict(0)
+    num_clade_occurrences = DefaultDict{AbstractClade,Int64}(0)
 
-    function clade_visitor(clade, height)
+    function clade_visitor(clade::AbstractClade, height::Float64)
         push!(clades, clade)
         num_clade_occurrences[clade] += 1
     end
 
     splits = Set()
-    num_split_occurrences = DefaultDict(0)
-    splits_per_clade = DefaultDict(Set)
+    num_split_occurrences = DefaultDict{Split,Int64}(0)
+    splits_per_clade = DefaultDict{Clade,Set{Split}}(Set)
 
-    function split_visitor(split)
+    function split_visitor(split::Split)
         push!(splits, split)
         push!(splits_per_clade[split.parent], split)
 

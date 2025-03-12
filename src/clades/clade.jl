@@ -1,6 +1,6 @@
 abstract type AbstractClade end
 
-mutable struct Clade <: AbstractClade
+struct Clade <: AbstractClade
     bits::BitVector
     hash::UInt
 
@@ -37,7 +37,7 @@ function Clade(leaves, num_taxa::Int)
 end
 
 function Base.:(==)(clade1::AbstractClade, clade2::AbstractClade)
-    return clade1.bits == clade2.bits
+    return clade1.hash == clade2.hash && clade1.bits == clade2.bits
 end
 
 function Base.hash(clade::AbstractClade, h::UInt)

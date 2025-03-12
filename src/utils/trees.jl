@@ -3,7 +3,15 @@ using PhyloNetworks
 const Tree = HybridNetwork
 
 function load_trees(mcmc_path::String)::Vector{Tree}
-    readnexus_treeblock(mcmc_path)
+    trees = readnexus_treeblock(mcmc_path)
+
+    if length(trees) == 0
+        open(mcmc_path) do io
+            trees = map(readnewick, io |> eachline)
+        end
+    end
+
+    return trees
 end
 
 function load_trees_from_newick(newick::String)::Vector{Tree}
@@ -14,7 +22,7 @@ function load_trees_from_newick(newicks::Vector{String})::Vector{Tree}
     [readnewick(newick) for newick in newicks]
 end
 
-function get_tip_names(tree::Tree)
+function get_tip_names(tree::Tree)::Vector{String}
     tiplabels(tree) |> sort
 end
 
