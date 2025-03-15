@@ -55,7 +55,7 @@ function log_density(ccd::CCD1, cladified_tree::CladifiedTree)
 end
 
 function log_density(ccd::CCD1, split::Split)
-    log(ccd.num_split_occurrences[split] / ccd.num_clade_occurrences[split.parent])
+    log(get(ccd.num_split_occurrences, split, 0.0) / get(ccd.num_clade_occurrences, split.parent, 0.0))
 end
 
 # get most likely tree

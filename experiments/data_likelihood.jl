@@ -6,9 +6,9 @@ using StatsBase
 
 theme(:wong)
 
-function get_data_likelihood(distribution_constructor, ref_trees)
-    distributions = distribution_constructor(ref_trees)
-    ref_probabilities = log_density.(Ref(distributions), ref_trees)
+function get_data_likelihood(time_distribution_constructor, ref_trees)
+    time_distribution = time_distribution_constructor(ref_trees)
+    ref_probabilities = log_density.(Ref(time_distribution), ref_trees)
     return sum(ref_probabilities)
 end
 
@@ -16,12 +16,17 @@ function plot_get_data_likelihood(distributions, tree_file)
     @info "Load reference trees"
     ref_trees = load_trees(tree_file)
 
+    @info "Fit CCD"
+    ccd = CCD1(ref_trees)
+    ccd_probability = sum(log_density.(Ref(ccd), ref_trees))
+    
     @info "Get data likelihoods"
     data_likelihoods = get_data_likelihood.(distributions, Ref(ref_trees))
+    data_likelihoods = data_likelihoods .+ ccd_probability
 
     @info "Plot data likelihoods"
     n = length(data_likelihoods)
-    palette = cgrad(:Set2_8);
+    palette = cgrad(:RdYlBu_8, n, categorical = true);
     plot(
         size=(500, 400),
         xticks=false,
@@ -48,23 +53,15 @@ distributions = [
     },
     TractableTimeTreeDist{
         CCD1,
-        ShorterBranchDist{IndependentDist{Weibull}}
-    },
-    TractableTimeTreeDist{
-        CCD1,
         LastDivergenceBranchDist{IndependentDist{LogNormal},IndependentDist{LogNormal}}
     },
     TractableTimeTreeDist{
         CCD1,
         LastDivergenceBranchDist{IndependentDist{LogNormal},IndependentDist{Gamma}}
     },
-    TractableTimeTreeDist{
-        CCD1,
-        LastDivergenceBranchDist{IndependentDist{LogNormal},IndependentDist{Weibull}}
-    }
 ]
 
 plot_get_data_likelihood(
     distributions,
-    "/Users/tobiaochsner/Documents/Thesis/Validation/data/mcmc_runs/yule-50_1.trees"
+    "/Users/tobiaochsner/Documents/Thesis/Validation/data/mcmc_runs/yule-10_1.trees"
 )
