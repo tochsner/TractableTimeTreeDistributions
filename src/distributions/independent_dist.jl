@@ -21,7 +21,7 @@ function IndependentDist{D}(trees::Vector{CladifiedTree}) where D
             try
                 distributions[clade] = fit_mle(D, clade_observations)
             catch
-                @info "MLE not working"
+                @warn "Numerical MLE threw an error, we fall back to a heruristic fit"
                 distributions[clade] = fit(D, clade_observations)
             end
         end
@@ -41,13 +41,21 @@ function sample_tree(distribution::IndependentDist{D}, tree::CladifiedTree)::Cla
     return CladifiedTree(parameters, tree)
 end
 
-function most_likely_tree(distribution::IndependentDist{D}, tree::CladifiedTree)::CladifiedTree where D
+function point_estimate(distribution::IndependentDist{D}, tree::CladifiedTree)::CladifiedTree where D
     parameters = Dict(
-        clade => median(distribution.distributions[clade])
+        clade => point_estimate(distribution.distributions[clade])
         for clade in keys(tree.splits)
         if haskey(distribution.distributions, clade)
     )
     return CladifiedTree(parameters, tree)
+end
+
+function point_estimate(distribution::ContinuousUnivariateDistribution)
+    try
+        mode(distribution)
+    catch
+        median(distribution)
+    end
 end
 
 function log_density(distribution::IndependentDist{D}, tree::CladifiedTree) where D

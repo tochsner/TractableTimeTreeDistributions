@@ -18,7 +18,6 @@ function mrca_tree(tree::CladifiedTree, observed_trees::Vector{CladifiedTree})
             end
         end
         parameters[clade] = total_heights / length(observed_trees)
-        println(total_heights / length(observed_trees))
     end
 
     return CladifiedTree(parameters, tree)

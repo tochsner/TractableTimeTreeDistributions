@@ -61,7 +61,7 @@ end
 
 # get most likely tree
 
-function most_likely_tree(ccd::CCD0)
+function point_estimate(ccd::CCD0)
     most_likely_splits::Dict{Clade,Split} = Dict()
     collect_most_likely_splits!(ccd, ccd.root_clade, most_likely_splits)
     return CladifiedTree(ccd.tip_names, ccd.root_clade, most_likely_splits, Dict())

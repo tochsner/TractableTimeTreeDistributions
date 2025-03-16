@@ -24,9 +24,9 @@ function sample_tree(distribution::LastDivergenceBranchDist, tree::CladifiedTree
     return invert_last_divergence_branches(sampled_tree)
 end
 
-function most_likely_tree(distribution::LastDivergenceBranchDist, tree::CladifiedTree)
-    map_tree_with_branches = most_likely_tree(distribution.branches, tree)
-    map_tree_with_last_div = most_likely_tree(distribution.last_div, tree)
+function point_estimate(distribution::LastDivergenceBranchDist, tree::CladifiedTree)
+    map_tree_with_branches = point_estimate(distribution.branches, tree)
+    map_tree_with_last_div = point_estimate(distribution.last_div, tree)
     map_tree = CladifiedTree(
         merge(map_tree_with_last_div.parameters, map_tree_with_branches.parameters),
         tree

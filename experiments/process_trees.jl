@@ -5,11 +5,22 @@ using StatsBase
 using HypothesisTests
 
 trees_file = "/Users/tobiaochsner/Documents/Thesis/TractableTreeDistributions/test/ref_trees.trees"
-trees_file = "/Users/tobiaochsner/Documents/Thesis/Validation/data/mcmc_runs/yule-10_10.trees"
 output_dir = "/Users/tobiaochsner/Documents/Thesis/TractableTreeDistributions"
+
+if length(ARGS) == 2
+    trees_file = ARGS[1]
+    output_dir = ARGS[2]
+end
+
 distributions = [
-    HeightRatioDist{IndependentDist{LogNormal},IndependentDist{LogitNormal}},
-    LastDivergenceBranchDist{IndependentDist{Gamma},IndependentDist{Gamma}}
+    HeightRatioDist{IndependentDist{LogNormal},IndependentDist{LogitNormal}}
+    HeightRatioDist{IndependentDist{LogNormal},IndependentDist{Beta}}
+    ShorterBranchDist{IndependentDist{LogNormal}}
+    ShorterBranchDist{IndependentDist{Gamma}}
+    ShorterBranchDist{IndependentDist{Weibull}}
+    LastDivergenceBranchDist{IndependentDist{LogNormal}, IndependentDist{LogNormal}}
+    LastDivergenceBranchDist{IndependentDist{Gamma}, IndependentDist{Gamma}}
+    LastDivergenceBranchDist{IndependentDist{Weibull}, IndependentDist{Weibull}}
 ]
 num_samples = 10_000
 
@@ -22,7 +33,6 @@ cladified_trees = cladify_tree.(trees)
 
 tree_ess = get_ess(cladified_trees)
 trees_subsampled = sample(cladified_trees, floor(Int, tree_ess), replace=false)
-@info "Tree ESS is $(tree_ess)"
 
 @info "Split into train and val set for validation"
 
@@ -66,7 +76,7 @@ for distribution in distributions_train
     push!(credible_sets_val, credible_sets)
 end
 
-@info "Fit distributions on all ESS trees"
+@info "Get point estimates based on all ESS trees"
 
 ccd_subsampled = CCD1(trees_subsampled)
 distributions_subsampled = [
@@ -74,8 +84,8 @@ distributions_subsampled = [
     for distribution in distributions
 ]
 
-ccd_map_tree = most_likely_tree(ccd_subsampled)
-point_estimates = most_likely_tree.(distributions_subsampled, Ref(ccd_map_tree))
+ccd_map_tree = point_estimate(ccd_subsampled)
+point_estimates = point_estimate.(distributions_subsampled, Ref(ccd_map_tree))
 mrca_point_estimate = mrca_tree(ccd_map_tree, trees_subsampled)
 
 @info "Store results on disk"
@@ -85,6 +95,7 @@ base_file_name = basename(trees_file) |> splitext |> first
 statistics_file = joinpath(output_dir, "$(base_file_name)_stats.log")
 open(statistics_file, "w") do io
     println(io, "distribution;metric;value")
+    println(io, "-;tree_ess;$(tree_ess)")
 
     for i in eachindex(distributions)
         println(io, "$(readable_name(distributions[i]));log_data_likelihood;$(log_data_likelihoods_val[i])")
@@ -108,7 +119,7 @@ point_estimate_file = joinpath(output_dir, "$(base_file_name)_point_estimate.tre
 open(point_estimate_file, "w") do io
     write_tree(
         io, 
-        push!(readable_name.(distributions), "MRCA"), 
+        push!(map(x -> "'$(x)'", readable_name.(distributions)), "'MRCA'"), 
         push!(point_estimates, mrca_point_estimate)
     )
 end

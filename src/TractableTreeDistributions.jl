@@ -18,7 +18,7 @@ include("clades/clade_split.jl")
 include("clades/cladify_tree.jl")
 
 export AbstractClade, Leaf, Clade, Split, TreeWithClades, cladify_tree
-export CCD1, fit, log_density, most_likely_tree
+export CCD1, fit, log_density, point_estimate
 
 export construct_tree
 

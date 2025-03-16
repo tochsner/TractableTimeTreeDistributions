@@ -8,7 +8,7 @@
 
     ccd = CCD1(trees)
 
-    map_tree = most_likely_tree(ccd)
+    map_tree = point_estimate(ccd)
 
     @test Clade(1:2, 4) in keys(map_tree.splits)
     @test Clade(3:4, 4) in keys(map_tree.splits)
@@ -24,7 +24,7 @@ end
 
     ccd = CCD1(trees)
 
-    map_tree = most_likely_tree(ccd)
+    map_tree = point_estimate(ccd)
 
     @test Clade(3:4, 4) in keys(map_tree.splits)
     @test Clade(2:4, 4) in keys(map_tree.splits)
@@ -44,7 +44,7 @@ end
 
     ccd = CCD1(trees)
 
-    map_tree = most_likely_tree(ccd)
+    map_tree = point_estimate(ccd)
 
     @test Clade(2:3, 5) in keys(map_tree.splits)
     @test Clade(4:5, 5) in keys(map_tree.splits)
@@ -56,7 +56,7 @@ end
     true_map_tree = load_trees("map_tree.trees") |> first |> cladify_tree
 
     ccd = CCD1(reference_trees)
-    map_tree = most_likely_tree(ccd)
+    map_tree = point_estimate(ccd)
 
     @test map_tree.tip_names == true_map_tree.tip_names
     @test map_tree.root == true_map_tree.root

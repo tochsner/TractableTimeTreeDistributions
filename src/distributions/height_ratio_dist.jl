@@ -14,9 +14,9 @@ function readable_name(distribution::Type{HeightRatioDist{H, R}}) where {H, R}
     "Height ($(readable_name(H))), Ratios ($(readable_name(R)))"
 end
 
-function most_likely_tree(distribution::HeightRatioDist, tree::CladifiedTree)::CladifiedTree
-    map_tree_with_height = most_likely_tree(distribution.height, tree)
-    map_tree_with_ratios = most_likely_tree(distribution.ratios, tree)
+function point_estimate(distribution::HeightRatioDist, tree::CladifiedTree)::CladifiedTree
+    map_tree_with_height = point_estimate(distribution.height, tree)
+    map_tree_with_ratios = point_estimate(distribution.ratios, tree)
     map_tree_with_height_and_ratios = CladifiedTree(
         merge(map_tree_with_height.parameters, map_tree_with_ratios.parameters),
         map_tree_with_height

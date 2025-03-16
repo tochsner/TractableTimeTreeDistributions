@@ -14,8 +14,8 @@ function sample_tree(distribution::ShorterBranchDist, tree::CladifiedTree)::Clad
     sample_tree(distribution.branches, tree) |> invert_short_branches
 end
 
-function most_likely_tree(distribution::ShorterBranchDist, cladified_tree::CladifiedTree)
-    most_likely_tree(distribution.branches, tree) |> invert_short_branches
+function point_estimate(distribution::ShorterBranchDist, tree::CladifiedTree)
+    point_estimate(distribution.branches, tree) |> invert_short_branches
 end
 
 function log_density(distribution::ShorterBranchDist, tree::CladifiedTree)
