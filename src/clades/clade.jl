@@ -20,9 +20,9 @@ struct Leaf <: AbstractClade
 end
 
 function Leaf(leaf::Int, num_taxa::Int, name::String)
-    bits = BitVector(undef, num_taxa)
+    bits = falses(num_taxa)
     bits[leaf] = true
-    return Leaf(bits, name)
+    Leaf(bits, name)
 end
 
 

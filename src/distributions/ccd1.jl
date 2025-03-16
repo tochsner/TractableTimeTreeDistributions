@@ -122,7 +122,7 @@ function get_max_log_ccp(ccd::CCD1, split::Split)
     log_density(ccd, split) + get_max_log_ccp(ccd, split.clade1) + get_max_log_ccp(ccd, split.clade2)
 end
 
-function get_max_log_ccp(ccd::CCD1, clade::Clade)
+@memoize function get_max_log_ccp(ccd::CCD1, clade::Clade)
     maximum(get_max_log_ccp(ccd, split) for split in ccd.splits_per_clade[clade])
 end
 

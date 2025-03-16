@@ -52,7 +52,13 @@ end
 
 function point_estimate(distribution::ContinuousUnivariateDistribution)
     try
-        mode(distribution)
+        point_estimate = mode(distribution)
+
+        if point_estimate == 0.0
+            point_estimate = median(distribution)
+        end
+
+        return point_estimate
     catch
         median(distribution)
     end
