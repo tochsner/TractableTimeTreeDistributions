@@ -14,8 +14,8 @@ function cladify_tree(tree::Tree)::CladifiedTree
     num_tips = length(tip_names)
 
     root_clade = Clade(1:num_tips, num_tips)
-    splits = Dict()
-    heights = Dict()
+    splits = Dict{Clade,Split}()
+    heights = Dict{Clade,Float64}()
 
     function clade_visitor(clade::AbstractClade, height::Float64)
         if is_root(clade)

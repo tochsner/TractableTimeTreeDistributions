@@ -24,6 +24,16 @@ function sample_tree(distribution::LastDivergenceBranchDist, tree::CladifiedTree
     return invert_last_divergence_branches(sampled_tree)
 end
 
+function most_likely_tree(distribution::LastDivergenceBranchDist, tree::CladifiedTree)
+    map_tree_with_branches = most_likely_tree(distribution.branches, tree)
+    map_tree_with_last_div = most_likely_tree(distribution.last_div, tree)
+    map_tree = CladifiedTree(
+        merge(map_tree_with_last_div.parameters, map_tree_with_branches.parameters),
+        tree
+    )
+    return invert_last_divergence_branches(map_tree)
+end
+
 function log_density(distribution::LastDivergenceBranchDist, tree::CladifiedTree)
     (
         log_density(distribution.last_div, transform_last_divergence(tree)) +

@@ -34,9 +34,18 @@ function readable_name(distribution::Type{IndependentDist{D}}) where D
     readable_name(D)
 end
 
-function sample_tree(distribution::IndependentDist{D}, tree::Union{CladifiedTree,CladifiedTree})::Union{CladifiedTree,CladifiedTree} where D
+function sample_tree(distribution::IndependentDist{D}, tree::CladifiedTree)::CladifiedTree where D
     parameters = Dict(
         clade => rand(dist) for (clade, dist) in distribution.distributions
+    )
+    return CladifiedTree(parameters, tree)
+end
+
+function most_likely_tree(distribution::IndependentDist{D}, tree::CladifiedTree)::CladifiedTree where D
+    parameters = Dict(
+        clade => median(distribution.distributions[clade])
+        for clade in keys(tree.splits)
+        if haskey(distribution.distributions, clade)
     )
     return CladifiedTree(parameters, tree)
 end
@@ -45,6 +54,6 @@ function log_density(distribution::IndependentDist{D}, tree::CladifiedTree) wher
     sum(
         haskey(distribution.distributions, clade) ?
         logpdf(distribution.distributions[clade], param)
-        : -Inf for (clade, param) in tree.parameters
+        : 0.0 for (clade, param) in tree.parameters
     )
 end

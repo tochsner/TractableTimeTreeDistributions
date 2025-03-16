@@ -24,6 +24,9 @@ export construct_tree
 
 include("utils/construct_tree.jl")
 
+include("utils/rf_distance.jl")
+include("utils/tree_ess.jl")
+
 # Distributions
 
 include("distributions/distribution.jl")
@@ -34,12 +37,16 @@ include("distributions/multivariate_dist.jl")
 include("distributions/ccd1.jl")
 include("distributions/tractable_time_tree_dist.jl")
 include("distributions/last_divergence_branch_dist.jl")
+include("distributions/mrca.jl")
 
 export CladifiedTree, TractableTimeTreeDist
 export LastDivergenceBranchDist, transform_last_divergence, transform_branches, invert_last_divergence_branches
 export HeightRatioDist, transform_height, transform_ratios, invert_height, invert_ratios, transform_short_branches, invert_short_branches, ShorterBranchDist
 export IndependentDist, sample_tree, MultivariateDist
 
+export mrca_tree
+
 export readable_name
+export robinson_foulds_distance, get_ess
 
 end # module TractableTreeDistributions

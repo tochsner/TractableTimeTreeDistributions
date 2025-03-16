@@ -22,6 +22,10 @@ function log_density(distribution::TractableTimeTreeDist{Topopolgy,Times}, cladi
     log_density(distribution.topology, cladified_tree) + log_density(distribution.times, cladified_tree)
 end
 
+function most_likely_tree(distribution::TractableTimeTreeDist{Topopolgy,Times}, tree::Tree) where {Topopolgy,Times}
+    most_likely_tree(distribution, most_likely_tree(tree))
+end
+
 function sample_tree(distribution::TractableTimeTreeDist{Topopolgy,Times})::CladifiedTree where {Topopolgy,Times}
     sample_tree(
         distribution.times,

@@ -16,7 +16,7 @@ function construct_tree!(clade::Clade, cladified_tree::CladifiedTree, tree::Phyl
     clade_node = Phylo.createnode!(tree, missing)
 
     branch1 = cladified_tree.parameters[clade] - (is_leaf(split.clade1) ? 0.0 : cladified_tree.parameters[split.clade1])
-    branch2 = cladified_tree.parameters[clade] - (is_leaf(split.clade1) ? 0.0 : cladified_tree.parameters[split.clade1])
+    branch2 = cladified_tree.parameters[clade] - (is_leaf(split.clade2) ? 0.0 : cladified_tree.parameters[split.clade2])
 
     Phylo.createbranch!(tree, clade_node, child_node1, branch1)
     Phylo.createbranch!(tree, clade_node, child_node2, branch2)
@@ -30,4 +30,15 @@ end
 
 function write_tree(path::String, cladified_tree::CladifiedTree)
     Phylo.write(path, construct_tree(cladified_tree), format=Phylo.Nexus())
+end
+
+function write_tree(io::IOStream, cladified_tree::CladifiedTree)
+    Phylo.write(io, construct_tree(cladified_tree), format=Phylo.Nexus())
+end
+
+function write_tree(io::IOStream, labels::Vector{String}, cladified_trees::Vector{CladifiedTree})
+    Phylo.write(io, Phylo.TreeSet(Dict(
+        l => construct_tree(cladified_tree)
+        for (l, cladified_tree) in zip(labels, cladified_trees)
+    )))
 end
