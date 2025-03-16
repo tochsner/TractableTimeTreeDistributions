@@ -1,7 +1,0 @@
-distribution;metric;value
-Height (LogNormal), Ratios (LogitNormal);log_data_likelihood;887684.9586378236
-Height (LogNormal), Ratios (LogitNormal);anderson_darling_test_statistics;3.3286833215559475
-Height (LogNormal), Ratios (LogitNormal);anderson_darling_p_value;0.0186313156286735
-Last Divergence (Gamma), Branches (Gamma);log_data_likelihood;852750.3820569769
-Last Divergence (Gamma), Branches (Gamma);anderson_darling_test_statistics;35.97857669904594
-Last Divergence (Gamma), Branches (Gamma);anderson_darling_p_value;7.793924688568751e-18
