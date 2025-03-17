@@ -17,14 +17,23 @@ function IndependentDist{D}(trees::Vector{CladifiedTree}) where D
     for (clade, clade_observations) in observations
         if length(clade_observations) < 5
             distributions[clade] = global_distribution
-        else
-            try
-                distributions[clade] = fit_mle(D, clade_observations)
-            catch
-                @warn "Numerical MLE threw an error, we fall back to a heruristic fit"
-                distributions[clade] = fit(D, clade_observations)
-            end
+            continue
         end
+        
+        try
+            distributions[clade] = fit_mle(D, clade_observations)
+            continue
+        catch end
+
+        @warn "Numerical MLE threw an error, we fall back to a heruristic fit"
+                
+        try
+            distributions[clade] = fit(D, clade_observations)
+            continue
+        catch end
+
+        @warn "Numerical heuristic threw an error as well, we fall back to the global distribution"
+        distributions[clade] = global_distribution
     end
 
     return IndependentDist{D}(distributions)
@@ -59,9 +68,13 @@ function point_estimate(distribution::ContinuousUnivariateDistribution)
         end
 
         return point_estimate
-    catch
-        median(distribution)
-    end
+    catch end
+
+    try
+        return median(distribution)
+    catch end
+
+    return mean(distribution)
 end
 
 function log_density(distribution::IndependentDist{D}, tree::CladifiedTree) where D
