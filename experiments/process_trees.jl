@@ -12,6 +12,8 @@ if length(ARGS) == 2
     output_dir = ARGS[2]
 end
 
+@info "Input file is $(trees_file)"
+
 distributions = [
     HeightRatioDist{IndependentDist{LogNormal},IndependentDist{LogitNormal}}
     HeightRatioDist{IndependentDist{LogNormal},IndependentDist{Beta}}
@@ -59,14 +61,12 @@ credible_sets_val = []
 
 for distribution in distributions_train
     log_densities_val = log_density.(Ref(distribution), trees_val) .+ log_density.(Ref(ccd_train), trees_val)
-    log_densities_val = filter(x -> -Inf < x, log_densities_val)
     
-    log_data_likelihood_val = sum(log_densities_val)
+    log_data_likelihood_val = filter(x -> -Inf < x, log_densities_val) |> sum
     push!(log_data_likelihoods_val, log_data_likelihood_val)
 
     samples = [sample_tree(distribution, sample_tree(ccd_train)) for _ in 1:num_samples]
     log_densities_samples = log_density.(Ref(distribution), samples) .+ log_density.(Ref(ccd_train), samples)
-    log_densities_samples = filter(x -> -Inf < x, log_densities_samples)
 
     ad_test = KSampleADTest(log_densities_val, log_densities_samples)
     ad_test_statistic = ad_test.A²k
