@@ -38,6 +38,7 @@ include("distributions/ccd1.jl")
 include("distributions/tractable_time_tree_dist.jl")
 include("distributions/last_divergence_branch_dist.jl")
 include("distributions/mrca.jl")
+include("distributions/numerical_distributions_utils.jl")
 
 export CladifiedTree, TractableTimeTreeDist
 export LastDivergenceBranchDist, transform_last_divergence, transform_branches, invert_last_divergence_branches
