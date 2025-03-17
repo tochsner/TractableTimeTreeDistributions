@@ -55,3 +55,10 @@ function mode(d::LogitNormal; tol::Real=1e-16, maxiter::Int=1000)
         return left
     end
 end
+
+"""
+A simple Monte Carlo estimator for the mean of a LogitNormal distribution.
+"""
+function mean(d::LogitNormal; num_samples::Int=10_000)
+    return mean(rand(d, num_samples))
+end

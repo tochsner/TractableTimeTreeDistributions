@@ -32,7 +32,7 @@ cladified_trees = cladify_tree.(trees)
 @info "Calculate tree ESS and subsample trees down to ESS"
 
 tree_ess = get_ess(cladified_trees)
-trees_subsampled = sample(cladified_trees, floor(Int, tree_ess), replace=false)
+trees_subsampled = sample(cladified_trees, floor(Int, tree_ess); replace=false, ordered=true)
 
 @info "Split into train and val set for validation"
 

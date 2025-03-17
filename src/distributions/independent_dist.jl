@@ -60,21 +60,7 @@ function point_estimate(distribution::IndependentDist{D}, tree::CladifiedTree)::
 end
 
 function point_estimate(distribution::ContinuousUnivariateDistribution)
-    try
-        point_estimate = mode(distribution)
-
-        if point_estimate == 0.0
-            point_estimate = median(distribution)
-        end
-
-        return point_estimate
-    catch end
-
-    try
-        return median(distribution)
-    catch end
-
-    return mean(distribution)
+    mean(distribution)
 end
 
 function log_density(distribution::IndependentDist{D}, tree::CladifiedTree) where D
