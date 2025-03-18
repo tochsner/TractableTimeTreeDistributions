@@ -4,16 +4,6 @@ using Logging
 using StatsBase
 using HypothesisTests
 
-trees_file = "/Users/tobiaochsner/Documents/Thesis/TractableTreeDistributions/test/ref_trees.trees"
-output_dir = "/Users/tobiaochsner/Documents/Thesis/TractableTreeDistributions"
-
-if length(ARGS) == 2
-    trees_file = ARGS[1]
-    output_dir = ARGS[2]
-end
-
-@info "Input file is $(trees_file)"
-
 distributions = [
     HeightRatioDist{IndependentDist{LogNormal},IndependentDist{LogitNormal}}
     HeightRatioDist{IndependentDist{LogNormal},IndependentDist{Beta}}
@@ -25,6 +15,18 @@ distributions = [
     LastDivergenceBranchDist{IndependentDist{Weibull}, IndependentDist{Weibull}}
 ]
 num_samples = 10_000
+train_fraction = 0.75
+
+trees_file = "/Users/tobiaochsner/Documents/Thesis/TractableTreeDistributions/test/ref_trees.trees"
+output_dir = "/Users/tobiaochsner/Documents/Thesis/TractableTreeDistributions"
+
+if length(ARGS) == 2
+    trees_file = ARGS[1]
+    output_dir = ARGS[2]
+    @info "Input file is $(trees_file)"
+    @info "Output directory is $(output_dir)"
+end
+
 
 @info "Load and prepare reference trees"
 
@@ -38,13 +40,13 @@ trees_subsampled = sample(cladified_trees, floor(Int, tree_ess); replace=false, 
 
 @info "Split into train and val set for validation"
 
-half = length(trees_subsampled) ÷ 2
-trees_train = trees_subsampled[1:half]
-trees_val = trees_subsampled[half+1:end]
+num_train_trees = floor(Int, length(trees_subsampled) * train_fraction)
+trees_train = trees_subsampled[1:num_train_trees]
+trees_val = trees_subsampled[num_train_trees+1:end]
 
 @info "Fit distributions on train set"
 
-ccd_train = CCD1(trees_train)
+ccd_train = CCD0(trees_train)
 distributions_train = [
     distribution(trees_train)
     for distribution in distributions
@@ -81,7 +83,7 @@ end
 
 @info "Get point estimates based on all ESS trees"
 
-ccd_subsampled = CCD1(trees_subsampled)
+ccd_subsampled = CCD0(trees_subsampled)
 distributions_subsampled = [
     distribution(trees_subsampled)
     for distribution in distributions
