@@ -16,6 +16,7 @@ distributions = [
 ]
 num_samples = 10_000
 train_fraction = 0.75
+burn_in_fraction = 0.1
 
 trees_file = "/Users/tobiaochsner/Documents/Thesis/TractableTreeDistributions/test/ref_trees.trees"
 output_dir = "/Users/tobiaochsner/Documents/Thesis/TractableTreeDistributions"
@@ -31,6 +32,7 @@ end
 @info "Load and prepare reference trees"
 
 trees = load_trees(trees_file)
+trees = trees[ceil(Int, length(trees) * burn_in_fraction):end]
 cladified_trees = cladify_tree.(trees)
 
 @info "Calculate tree ESS and subsample trees down to ESS"

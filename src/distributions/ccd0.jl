@@ -108,7 +108,7 @@ end
         for split in ccd.splits_per_clade[clade]
     ]
 
-    # we use the log-sum-exp trick to compute the normalization constant ina numerically
+    # we use the log-sum-exp trick to compute the normalization constant in a numerically
     # more stable
     # https://gregorygundersen.com/blog/2020/02/09/log-sum-exp/
     max_log_clade_credibility = maximum(split_log_probabilities)
@@ -118,7 +118,7 @@ end
 end
 
 function log_clade_credibility(ccd::CCD0, clade::Clade)
-    log(ccd.num_clade_occurrences[clade] / ccd.num_trees)
+    log(get(ccd.num_clade_occurrences, clade, 0) / ccd.num_trees)
 end
 
 # utils
