@@ -18,7 +18,7 @@ include("clades/clade_split.jl")
 include("clades/cladify_tree.jl")
 
 export AbstractClade, Leaf, Clade, Split, TreeWithClades, cladify_tree
-export CCD1, fit, log_density, point_estimate
+export CCD1, CCD0, fit, log_density, point_estimate
 
 export construct_tree
 
@@ -34,6 +34,8 @@ include("distributions/short_branch_dist.jl")
 include("distributions/height_ratio_dist.jl")
 include("distributions/independent_dist.jl")
 include("distributions/multivariate_dist.jl")
+include("distributions/ccd.jl")
+include("distributions/ccd0.jl")
 include("distributions/ccd1.jl")
 include("distributions/tractable_time_tree_dist.jl")
 include("distributions/last_divergence_branch_dist.jl")

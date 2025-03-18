@@ -60,6 +60,10 @@ function is_leaf(clade::AbstractClade)
     sum(clade.bits) == 1
 end
 
+function is_cherry(clade::AbstractClade)
+    sum(clade.bits) == 2
+end
+
 function is_root(clade::AbstractClade)
     sum(clade.bits) == clade.bits.len
 end
