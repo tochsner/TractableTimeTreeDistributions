@@ -86,7 +86,15 @@ end
 # get log probability
 
 function log_density(ccd::CCD0, split::Split)
-    (
+    if min(
+        ccd.num_clade_occurrences[split.clade1],
+        ccd.num_clade_occurrences[split.clade2],
+        ccd.num_clade_occurrences[split.parent],
+    ) == 0
+        return -Inf
+    end
+
+    return (
         log_clade_normalization(ccd, split.clade1) +
         log_clade_normalization(ccd, split.clade2) -
         log_clade_normalization(ccd, split.parent) +
