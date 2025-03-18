@@ -106,6 +106,8 @@ open(statistics_file, "w") do io
     println(io, "distribution;metric;value")
     println(io, "-;tree_ess;$(tree_ess)")
     println(io, "-;entropy;$(ccd_entropy)")
+    println(io, "-;num_taxa;$(ccd_subsampled.num_taxa)")
+    println(io, "-;num_trees;$(ccd_subsampled.num_trees)")
 
     for i in eachindex(distributions)
         println(io, "$(readable_name(distributions[i]));log_data_likelihood;$(log_data_likelihoods_val[i])")
