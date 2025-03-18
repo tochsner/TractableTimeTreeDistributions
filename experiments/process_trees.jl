@@ -18,7 +18,7 @@ num_samples = 10_000
 train_fraction = 0.75
 burn_in_fraction = 0.1
 
-trees_file = "/Users/tobiaochsner/Documents/Thesis/TractableTreeDistributions/test/ref_trees.trees"
+trees_file = "/Users/tobiaochsner/Downloads/data_from_geographic_and_tempo_Dataset_S5_SNAPPoutput_AS7_42SNP_113indiv.trees"
 output_dir = "/Users/tobiaochsner/Documents/Thesis/TractableTreeDistributions"
 
 if length(ARGS) == 2
@@ -56,15 +56,15 @@ distributions_train = [
 
 @info "Validate distributions"
 
-log_data_likelihoods_val = []
+log_ccd_densities_val = log_density.(Ref(ccd_train), trees_val)
 
+log_data_likelihoods_val = []
 ad_test_statistics_val = []
 ad_test_p_values_val = []
-
 credible_sets_val = []
 
 for distribution in distributions_train
-    log_densities_val = log_density.(Ref(distribution), trees_val) .+ log_density.(Ref(ccd_train), trees_val)
+    log_densities_val = log_density.(Ref(distribution), trees_val) .+ log_ccd_densities_val
     
     log_data_likelihood_val = filter(x -> -Inf < x, log_densities_val) |> sum
     push!(log_data_likelihoods_val, log_data_likelihood_val)
