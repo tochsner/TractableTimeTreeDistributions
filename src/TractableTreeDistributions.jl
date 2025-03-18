@@ -45,7 +45,7 @@ include("distributions/numerical_distributions_utils.jl")
 export CladifiedTree, TractableTimeTreeDist
 export LastDivergenceBranchDist, transform_last_divergence, transform_branches, invert_last_divergence_branches
 export HeightRatioDist, transform_height, transform_ratios, invert_height, invert_ratios, transform_short_branches, invert_short_branches, ShorterBranchDist
-export IndependentDist, sample_tree, MultivariateDist
+export IndependentDist, sample_tree, MultivariateDist, get_entropy
 
 export mrca_tree
 

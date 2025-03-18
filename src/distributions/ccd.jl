@@ -59,3 +59,18 @@ function collect_sampled_splits!(ccd::CCD, current_clade::Clade, sampled_splits:
 end
 
 function collect_sampled_splits!(ccd::CCD, current_clade::Leaf, sampled_splits::Dict{Clade,Split}) end
+
+# entropy
+
+function TractableTreeDistributions.entropy(ccd::CCD)
+    entropy(ccd, ccd.root_clade)
+end
+function TractableTreeDistributions.entropy(ccd::CCD, clade::Clade)
+    sum(
+        -exp(log_density(ccd, split)) * (log_density(ccd, split) - entropy(ccd, split.clade1) - entropy(ccd, split.clade2))
+        for split in ccd.splits_per_clade[clade]
+    )
+end
+function TractableTreeDistributions.entropy(::CCD, ::Leaf)
+    0.0
+end

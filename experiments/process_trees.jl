@@ -95,6 +95,8 @@ ccd_map_tree = point_estimate(ccd_subsampled)
 point_estimates = point_estimate.(distributions_subsampled, Ref(ccd_map_tree))
 mrca_point_estimate = mrca_tree(ccd_map_tree, trees_subsampled)
 
+ccd_entropy = entropy(ccd_subsampled)
+
 @info "Store results on disk"
 
 base_file_name = basename(trees_file) |> splitext |> first
@@ -103,6 +105,7 @@ statistics_file = joinpath(output_dir, "$(base_file_name)_stats.log")
 open(statistics_file, "w") do io
     println(io, "distribution;metric;value")
     println(io, "-;tree_ess;$(tree_ess)")
+    println(io, "-;entropy;$(ccd_entropy)")
 
     for i in eachindex(distributions)
         println(io, "$(readable_name(distributions[i]));log_data_likelihood;$(log_data_likelihoods_val[i])")
