@@ -64,7 +64,7 @@ function expand_splits!(ccd::CCD0)
             continue
         end
 
-        for size in 1:(size(parent) ÷ 2)
+        for size in 1:(size(parent)÷2)
             for potential_child in clade_per_size[size]
                 if !(potential_child in parent)
                     continue
@@ -87,9 +87,9 @@ end
 
 function log_density(ccd::CCD0, split::Split)
     if min(
-        ccd.num_clade_occurrences[split.clade1],
-        ccd.num_clade_occurrences[split.clade2],
-        ccd.num_clade_occurrences[split.parent],
+        get(ccd.num_clade_occurrences, split.clade1, 0),
+        get(ccd.num_clade_occurrences, split.clade2, 0),
+        get(ccd.num_clade_occurrences, split.parent, 0),
     ) == 0
         return -Inf
     end
