@@ -49,7 +49,7 @@ trees_val = trees_subsampled[num_train_trees+1:end]
 
 @info "Fit distributions on train set"
 
-ccd_train = CCD0(trees_train)
+ccd_train = CCD1(trees_train)
 distributions_train = [
     distribution(trees_train)
     for distribution in distributions
@@ -87,7 +87,7 @@ end
 
 @info "Get point estimates based on all ESS trees"
 
-ccd_subsampled = CCD0(trees_subsampled)
+ccd_subsampled = CCD1(trees_subsampled)
 distributions_subsampled = [
     distribution(trees_subsampled)
     for distribution in distributions
