@@ -1,0 +1,32 @@
+distribution;metric;value
+-;tree_ess;43866.90581292754
+-;entropy;2.034698810349127
+-;num_taxa;10
+-;num_trees;43866
+Height (LogNormal), Ratios (TreeDirichletDist);log_data_likelihood;368514.4046545932
+Height (LogNormal), Ratios (TreeDirichletDist);anderson_darling_test_statistics;236.7904371361113
+Height (LogNormal), Ratios (TreeDirichletDist);anderson_darling_p_value;5.003268605535383e-112
+Height (LogNormal), Ratios (LogitNormal);log_data_likelihood;372985.0661274902
+Height (LogNormal), Ratios (LogitNormal);anderson_darling_test_statistics;3.700050184303601
+Height (LogNormal), Ratios (LogitNormal);anderson_darling_p_value;0.01221144410485281
+Height (LogNormal), Ratios (Beta);log_data_likelihood;375955.99371687364
+Height (LogNormal), Ratios (Beta);anderson_darling_test_statistics;1.243229329977398
+Height (LogNormal), Ratios (Beta);anderson_darling_p_value;0.2511188547678172
+Shortest Branch (LogNormal);log_data_likelihood;370930.16034397116
+Shortest Branch (LogNormal);anderson_darling_test_statistics;33.342800018002634
+Shortest Branch (LogNormal);anderson_darling_p_value;1.3410207848351723e-16
+Shortest Branch (Gamma);log_data_likelihood;375436.42676934844
+Shortest Branch (Gamma);anderson_darling_test_statistics;1.7353160967676704
+Shortest Branch (Gamma);anderson_darling_p_value;0.12963927467661945
+Shortest Branch (Weibull);log_data_likelihood;373962.5177964873
+Shortest Branch (Weibull);anderson_darling_test_statistics;52.21169161714522
+Shortest Branch (Weibull);anderson_darling_p_value;1.8918334434071133e-25
+Last Divergence (LogNormal), Branches (LogNormal);log_data_likelihood;351933.37986559496
+Last Divergence (LogNormal), Branches (LogNormal);anderson_darling_test_statistics;5.33641687109265
+Last Divergence (LogNormal), Branches (LogNormal);anderson_darling_p_value;0.0019635382099417865
+Last Divergence (Gamma), Branches (Gamma);log_data_likelihood;357496.13583719096
+Last Divergence (Gamma), Branches (Gamma);anderson_darling_test_statistics;16.317713130074985
+Last Divergence (Gamma), Branches (Gamma);anderson_darling_p_value;1.297602996516491e-8
+Last Divergence (Weibull), Branches (Weibull);log_data_likelihood;356941.1880158208
+Last Divergence (Weibull), Branches (Weibull);anderson_darling_test_statistics;106.13400273164963
+Last Divergence (Weibull), Branches (Weibull);anderson_darling_p_value;9.645837411506087e-51

@@ -6,20 +6,20 @@ using HypothesisTests
 
 distributions = [
     HeightRatioDist{IndependentDist{LogNormal},TreeDirichletDist}
-    # HeightRatioDist{IndependentDist{LogNormal},IndependentDist{LogitNormal}}
+    HeightRatioDist{IndependentDist{LogNormal},IndependentDist{LogitNormal}}
     HeightRatioDist{IndependentDist{LogNormal},IndependentDist{Beta}}
-    # ShorterBranchDist{IndependentDist{LogNormal}}
-    # ShorterBranchDist{IndependentDist{Gamma}}
-    # ShorterBranchDist{IndependentDist{Weibull}}
-    # LastDivergenceBranchDist{IndependentDist{LogNormal}, IndependentDist{LogNormal}}
-    # LastDivergenceBranchDist{IndependentDist{Gamma}, IndependentDist{Gamma}}
-    # LastDivergenceBranchDist{IndependentDist{Weibull}, IndependentDist{Weibull}}
+    ShorterBranchDist{IndependentDist{LogNormal}}
+    ShorterBranchDist{IndependentDist{Gamma}}
+    ShorterBranchDist{IndependentDist{Weibull}}
+    LastDivergenceBranchDist{IndependentDist{LogNormal}, IndependentDist{LogNormal}}
+    LastDivergenceBranchDist{IndependentDist{Gamma}, IndependentDist{Gamma}}
+    LastDivergenceBranchDist{IndependentDist{Weibull}, IndependentDist{Weibull}}
 ]
 num_samples = 10_000
 train_fraction = 0.75
 burn_in_fraction = 0.1
 
-trees_file = "/Users/tobiaochsner/Downloads/yule-100-1.trees"
+trees_file = "/Users/tobiaochsner/Documents/Thesis/Validation/data/mcmc_runs/yule-50_8.trees"
 output_dir = "/Users/tobiaochsner/Documents/Thesis/TractableTreeDistributions"
 
 if length(ARGS) == 2

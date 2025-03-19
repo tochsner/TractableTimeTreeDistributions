@@ -1,0 +1,8 @@
+distribution;metric;value
+-;tree_ess;43747.50731799955
+-;entropy;2.250841899517302
+-;num_taxa;20
+-;num_trees;43747
+Height (LogNormal), Ratios (TreeDirichletDist);log_data_likelihood;755875.7012963824
+Height (LogNormal), Ratios (TreeDirichletDist);anderson_darling_test_statistics;156.56911758126196
+Height (LogNormal), Ratios (TreeDirichletDist);anderson_darling_p_value;2.1255669044897635e-74
