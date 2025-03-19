@@ -53,8 +53,12 @@ function estimate_k(trees::Vector{CladifiedTree})
             continue
         end
         
-        beta = fit_mle(Beta, fractions)
-        
+        beta = try
+            fit_mle(Beta, fractions)
+        catch
+            fit(Beta, fractions)
+        end
+
         K = beta.α + beta.β
         n = length(fractions)
 
