@@ -2,7 +2,8 @@ using TractableTreeDistributions
 using Test
 using Distributions
 
-include("test_ccd_entropy.jl")
+include("test_dirichlet.jl")
+# include("test_ccd_entropy.jl")
 # include("test_ccd0_expansion.jl")
 # include("test_ccd0_map.jl")
 # include("test_ccd0_probabilities.jl")

@@ -18,13 +18,28 @@ A numerical bisection method to find the mode of a univariate
 LogitNormal distribution.
 """
 function Distributions.mode(d::LogitNormal; tol::Real=1e-16, maxiter::Int=1000)
-    logit(x) = log(x) - log1p(-x)
-    f(x) = d.σ^2 * (2x - 1) + d.μ - logit(x)
+    extrema = 1e-8
+    
+    solution = bisection(extrema, 1.0 - extrema; tol=tol, maxiter=maxiter) do x
+        d.σ^2 * (2x - 1) + d.μ - (log(x) - log1p(-x))
+    end
 
-    extrema = 1e-10
+    if pdf(d, solution) < pdf(d, extrema) || pdf(d, solution) < pdf(d, 1.0 - extrema)
+        throw(ArgumentError("LogitNormal distribution is bivariate"))
+    else
+        # distribution is univariate
+        return solution
+    end
+end
 
-    left, right = extrema, 1.0 - extrema
+"""
+A simple Monte Carlo estimator for the mean of a LogitNormal distribution.
+"""
+function Distributions.mean(d::LogitNormal; num_samples::Int=10_000)
+    return mean(rand(d, num_samples))
+end
 
+function bisection(f::Function, left::Real, right::Real; tol::Real=1e-8, maxiter::Int=1000)
     Δx = right - left
     ϵ = Δx / left
 
@@ -48,17 +63,5 @@ function Distributions.mode(d::LogitNormal; tol::Real=1e-16, maxiter::Int=1000)
         N += 1
     end
 
-    if pdf(d, left) < pdf(d, extrema) || pdf(d, left) < pdf(d, 1.0 - extrema)
-        throw(ArgumentError("LogitNormal distribution is bivariate"))
-    else
-        # distribution is univariate
-        return left
-    end
-end
-
-"""
-A simple Monte Carlo estimator for the mean of a LogitNormal distribution.
-"""
-function Distributions.mean(d::LogitNormal; num_samples::Int=10_000)
-    return mean(rand(d, num_samples))
+    return (left + right) / 2
 end

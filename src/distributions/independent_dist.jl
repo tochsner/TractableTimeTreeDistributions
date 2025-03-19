@@ -52,15 +52,11 @@ end
 
 function point_estimate(distribution::IndependentDist{D}, tree::CladifiedTree)::CladifiedTree where D
     parameters = Dict(
-        clade => point_estimate(distribution.distributions[clade])
+        clade => mean(distribution.distributions[clade])
         for clade in keys(tree.splits)
         if haskey(distribution.distributions, clade)
     )
     return CladifiedTree(parameters, tree)
-end
-
-function point_estimate(distribution::ContinuousUnivariateDistribution)
-    mean(distribution)
 end
 
 function log_density(distribution::IndependentDist{D}, tree::CladifiedTree) where D

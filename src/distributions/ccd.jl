@@ -11,7 +11,7 @@ end
 function point_estimate(ccd::CCD)
     most_likely_splits::Dict{Clade,Split} = Dict()
     collect_most_likely_splits!(ccd, ccd.root_clade, most_likely_splits)
-    return CladifiedTree(ccd.tip_names, ccd.root_clade, most_likely_splits, Dict())
+    return CladifiedTree(ccd.tip_names, ccd.root_clade, most_likely_splits, Dict(), Dict())
 end
 
 function collect_most_likely_splits!(ccd::CCD, current_clade::Clade, most_likely_splits::Dict{Clade,Split})
@@ -31,7 +31,7 @@ function get_max_log_ccp(ccd::CCD, split::Split)
     log_density(ccd, split) + get_max_log_ccp(ccd, split.clade1) + get_max_log_ccp(ccd, split.clade2)
 end
 
-function get_max_log_ccp(ccd::CCD, clade::Clade)
+@memoize function get_max_log_ccp(ccd::CCD, clade::Clade)
     maximum(get_max_log_ccp(ccd, split) for split in ccd.splits_per_clade[clade])
 end
 
@@ -44,7 +44,7 @@ end
 function sample_tree(ccd::CCD)
     sampled_splits::Dict{Clade,Split} = Dict()
     collect_sampled_splits!(ccd, ccd.root_clade, sampled_splits)
-    return CladifiedTree(ccd.tip_names, ccd.root_clade, sampled_splits, Dict())
+    return CladifiedTree(ccd.tip_names, ccd.root_clade, sampled_splits, Dict(), Dict())
 end
 
 function collect_sampled_splits!(ccd::CCD, current_clade::Clade, sampled_splits::Dict{Clade,Split})

@@ -2,11 +2,12 @@ struct CladifiedTree
     tip_names::Vector{String}
     root::AbstractClade
     splits::Dict{Clade,Split}
+    heights::Dict{Clade,Float64}
     parameters::Dict{Clade,Float64}
 end
 
 function CladifiedTree(new_parameters::Dict{Clade,Float64}, cladified_tree::CladifiedTree)
-    CladifiedTree(cladified_tree.tip_names, cladified_tree.root, cladified_tree.splits, new_parameters)
+    CladifiedTree(cladified_tree.tip_names, cladified_tree.root, cladified_tree.splits, cladified_tree.heights, new_parameters)
 end
 
 function cladify_tree(tree::Tree)::CladifiedTree
@@ -32,7 +33,7 @@ function cladify_tree(tree::Tree)::CladifiedTree
 
     cladify_tree(tree, clade_visitor, split_visitor)
 
-    return CladifiedTree(tip_names, root_clade, splits, heights)
+    return CladifiedTree(tip_names, root_clade, splits, heights, heights)
 end
 
 function cladify_tree(tree::Tree, clade_visitor, split_visitor)
