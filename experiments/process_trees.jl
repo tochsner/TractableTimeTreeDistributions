@@ -5,7 +5,6 @@ using StatsBase
 using HypothesisTests
 
 distributions = [
-    HeightRatioDist{IndependentDist{LogNormal},TreeDirichletDist}
     HeightRatioDist{IndependentDist{LogNormal},IndependentDist{LogitNormal}}
     HeightRatioDist{IndependentDist{LogNormal},IndependentDist{Beta}}
     ShorterBranchDist{IndependentDist{LogNormal}}
