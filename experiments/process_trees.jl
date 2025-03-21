@@ -18,7 +18,7 @@ num_samples = 10_000
 train_fraction = 0.75
 burn_in_fraction = 0.1
 
-trees_file = "/Users/tobiaochsner/Documents/Thesis/Validation/data/mcmc_runs/yule-50_8.trees"
+trees_file = "/Users/tobiaochsner/Documents/Thesis/Validation/data/mcmc_runs/yule-10_1.trees"
 output_dir = "/Users/tobiaochsner/Documents/Thesis/TractableTreeDistributions"
 
 if length(ARGS) == 2

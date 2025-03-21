@@ -2,7 +2,7 @@ struct IndependentDist{D} <: AbstractDistribution
     distributions::Dict{Clade,D}
 end
 
-function IndependentDist{D}(trees::Vector{CladifiedTree}) where D
+function IndependentDist{D}(trees::Vector{CladifiedTree}) where {D}
     observations = DefaultDict{Clade,Vector{Float64}}([])
 
     for tree in trees
@@ -19,18 +19,20 @@ function IndependentDist{D}(trees::Vector{CladifiedTree}) where D
             distributions[clade] = global_distribution
             continue
         end
-        
+
         try
             distributions[clade] = fit_mle(D, clade_observations)
             continue
-        catch end
+        catch
+        end
 
         @warn "Numerical MLE threw an error, we fall back to a heruristic fit"
-                
+
         try
             distributions[clade] = fit(D, clade_observations)
             continue
-        catch end
+        catch
+        end
 
         @warn "Numerical heuristic threw an error as well, we fall back to the global distribution"
         distributions[clade] = global_distribution
@@ -39,18 +41,16 @@ function IndependentDist{D}(trees::Vector{CladifiedTree}) where D
     return IndependentDist{D}(distributions)
 end
 
-function readable_name(distribution::Type{IndependentDist{D}}) where D
-    readable_name(D)
-end
+readable_name(::Type{IndependentDist{D}}) where {D} = readable_name(D)
 
-function sample_tree(distribution::IndependentDist{D}, tree::CladifiedTree)::CladifiedTree where D
+function sample_tree(distribution::IndependentDist{D}, tree::CladifiedTree)::CladifiedTree where {D}
     parameters = Dict(
         clade => rand(dist) for (clade, dist) in distribution.distributions
     )
     return CladifiedTree(parameters, tree)
 end
 
-function point_estimate(distribution::IndependentDist{D}, tree::CladifiedTree)::CladifiedTree where D
+function point_estimate(distribution::IndependentDist{D}, tree::CladifiedTree)::CladifiedTree where {D}
     parameters = Dict(
         clade => mean(distribution.distributions[clade])
         for clade in keys(tree.splits)
@@ -59,7 +59,7 @@ function point_estimate(distribution::IndependentDist{D}, tree::CladifiedTree)::
     return CladifiedTree(parameters, tree)
 end
 
-function log_density(distribution::IndependentDist{D}, tree::CladifiedTree) where D
+function log_density(distribution::IndependentDist{D}, tree::CladifiedTree) where {D}
     sum(
         haskey(distribution.distributions, clade) ?
         logpdf(distribution.distributions[clade], param)

@@ -4,35 +4,23 @@ const Tree = HybridNetwork
 
 function load_trees(mcmc_path::String)::Vector{Tree}
     trees = readnexus_treeblock(mcmc_path)
-
-    if length(trees) == 0
-        open(mcmc_path) do io
-            trees = map(readnewick, io |> eachline)
-        end
+    if 0 < length(trees)
+        return trees
     end
-
-    return trees
+        
+    open(mcmc_path) do io
+        return map(readnewick, io |> eachline)
+    end
 end
 
-function load_trees_from_newick(newick::String)::Vector{Tree}
-    [readnewick(newick)]
-end
+load_trees_from_newick(newick::String)::Vector{Tree} = [readnewick(newick)]
+load_trees_from_newick(newicks::Vector{String})::Vector{Tree} = [readnewick(newick) for newick in newicks]
 
-function load_trees_from_newick(newicks::Vector{String})::Vector{Tree}
-    [readnewick(newick) for newick in newicks]
-end
 
-function get_tip_names(tree::Tree)::Vector{String}
-    tiplabels(tree) |> sort
-end
+get_tip_names(tree::Tree)::Vector{String} = tiplabels(tree) |> sort
+get_leaf_index_mapping(tree::Tree) = Dict(leaf => i for (i, leaf) in get_tip_names(tree) |> enumerate)
+get_leaf_index(tree::Tree, leaf::String) = findfirst(x -> x == leaf, sort(tiplabels(tree)))
 
-function get_leaf_index_mapping(tree::Tree)
-    Dict(leaf => i for (i, leaf) in get_tip_names(tree) |> enumerate)
-end
-
-function get_leaf_index(tree::Tree, leaf::String)
-    findfirst(x -> x == leaf, sort(tiplabels(tree)))
-end
 
 """
 A patch for the existing method changing the regex of taxon names to also allow periods.
@@ -70,7 +58,7 @@ function PhyloNetworks.readnexus_translatetable(io)
                 translate = false
                 break
             end
-            push!(id2name, parse(Int,m.captures[1]) => String(m.captures[2]))
+            push!(id2name, parse(Int, m.captures[1]) => String(m.captures[2]))
             if m.captures[3] == ";"
                 line = readline(io)
                 break

@@ -24,7 +24,7 @@ function TreeDirichletDist(trees::Vector{CladifiedTree})
         end
     end
 
-    alphas = estimate_clade_alphas(observations, observed_parents, K, trees[1].root)
+    alphas = estimate_clade_alphas(observations, observed_parents, K, trees[begin].root)
 
     return TreeDirichletDist(K, alphas)
 end

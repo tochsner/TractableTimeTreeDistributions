@@ -6,7 +6,6 @@ function construct_tree(cladified_tree::CladifiedTree)::Phylo.RootedTree
     construct_tree!(root_clade, cladified_tree, tree)
     return tree
 end
-
 function construct_tree!(clade::Clade, cladified_tree::CladifiedTree, tree::Phylo.RootedTree)
     split = cladified_tree.splits[clade]
 
@@ -23,22 +22,11 @@ function construct_tree!(clade::Clade, cladified_tree::CladifiedTree, tree::Phyl
 
     return clade_node
 end
+construct_tree!(clade::Leaf, cladified_tree, tree) = Phylo.createnode!(tree, clade.name)
 
-function construct_tree!(clade::Leaf, cladified_tree, tree)
-    Phylo.createnode!(tree, clade.name)
-end
-
-function write_tree(path::String, cladified_tree::CladifiedTree)
-    Phylo.write(path, construct_tree(cladified_tree), format=Phylo.Nexus())
-end
-
-function write_tree(io::IOStream, cladified_tree::CladifiedTree)
-    Phylo.write(io, construct_tree(cladified_tree), format=Phylo.Nexus())
-end
-
-function write_tree(io::IOStream, labels::Vector{String}, cladified_trees::Vector{CladifiedTree})
-    Phylo.write(io, Phylo.TreeSet(Dict(
-        l => construct_tree(cladified_tree)
-        for (l, cladified_tree) in zip(labels, cladified_trees)
-    )))
-end
+write_tree(path::String, cladified_tree::CladifiedTree) = Phylo.write(path, construct_tree(cladified_tree), format=Phylo.Nexus())
+write_tree(io::IOStream, cladified_tree::CladifiedTree) = Phylo.write(io, construct_tree(cladified_tree), format=Phylo.Nexus())
+write_tree(io::IOStream, labels::Vector{String}, cladified_trees::Vector{CladifiedTree}) = Phylo.write(io, Phylo.TreeSet(Dict(
+    l => construct_tree(cladified_tree)
+    for (l, cladified_tree) in zip(labels, cladified_trees)
+)))

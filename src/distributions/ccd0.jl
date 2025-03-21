@@ -13,14 +13,10 @@ struct CCD0 <: CCD
 end
 
 function CCD0(cladified_trees::Vector{CladifiedTree})
-    # basic initialization
-
-    tip_names = cladified_trees[1].tip_names
+    tip_names = cladified_trees[begin].tip_names
     num_taxa = length(tip_names)
     num_trees = length(cladified_trees)
     root_clade = Clade(1:num_taxa, num_taxa)
-
-    # intiialize clades and observed splits
 
     clades = Set()
     num_clade_occurrences = DefaultDict{AbstractClade,Int64}(0)
@@ -83,7 +79,7 @@ function expand_splits!(ccd::CCD0)
     end
 end
 
-# get log probability
+readable_name(ccd::Type{CCD0})  ="CCD0"
 
 function log_density(ccd::CCD0, split::Split)
     if min(
@@ -102,11 +98,7 @@ function log_density(ccd::CCD0, split::Split)
     )
 end
 
-@memoize function log_clade_normalization(ccd::CCD0, clade::AbstractClade)
-    if is_leaf(clade)
-        return 0.0
-    end
-
+@memoize function log_clade_normalization(ccd::CCD0, clade::Clade)
     if is_cherry(clade)
         return log_clade_credibility(ccd, clade)
     end
@@ -124,13 +116,6 @@ end
 
     return log_clade_credibility(ccd, clade) + log_normalization
 end
+log_clade_normalization(ccd::CCD0, clade::Leaf) = 0.0
 
-function log_clade_credibility(ccd::CCD0, clade::Clade)
-    log(get(ccd.num_clade_occurrences, clade, 0) / ccd.num_trees)
-end
-
-# utils
-
-function readable_name(ccd::Type{CCD0})
-    "CCD0"
-end
+log_clade_credibility(ccd::CCD0, clade::Clade) = log(get(ccd.num_clade_occurrences, clade, 0) / ccd.num_trees)

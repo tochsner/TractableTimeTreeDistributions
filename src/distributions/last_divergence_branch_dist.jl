@@ -3,16 +3,14 @@ struct LastDivergenceBranchDist{D,B} <: AbstractDistribution
     branches::AbstractDistribution
 end
 
-function LastDivergenceBranchDist{D,B}(trees::Vector{CladifiedTree}) where {D,B}
-    LastDivergenceBranchDist{D,B}(
-        D(transform_last_divergence.(trees)),
-        B(transform_branches.(trees))
-    )
-end
+LastDivergenceBranchDist{D,B}(trees::Vector{CladifiedTree}) where {D,B} = LastDivergenceBranchDist{D,B}(
+    D(transform_last_divergence.(trees)),
+    B(transform_branches.(trees))
+)
 
-function readable_name(distribution::Type{LastDivergenceBranchDist{D,B}}) where {D,B}
-    "Last Divergence ($(readable_name(D))), Branches ($(readable_name(B)))"
-end
+readable_name(::Type{LastDivergenceBranchDist{D,B}}) where {D,B} = "Last Divergence ($(readable_name(D))), Branches ($(readable_name(B)))"
+
+# high-level functions
 
 function sample_tree(distribution::LastDivergenceBranchDist, tree::CladifiedTree)::CladifiedTree
     sampled_tree_with_branches = sample_tree(distribution.branches, tree)
@@ -34,12 +32,12 @@ function point_estimate(distribution::LastDivergenceBranchDist, tree::CladifiedT
     return invert_last_divergence_branches(map_tree)
 end
 
-function log_density(distribution::LastDivergenceBranchDist, tree::CladifiedTree)
-    (
-        log_density(distribution.last_div, transform_last_divergence(tree)) +
-        log_density(distribution.branches, transform_branches(tree))
-    )
-end
+log_density(distribution::LastDivergenceBranchDist, tree::CladifiedTree) = (
+    log_density(distribution.last_div, transform_last_divergence(tree)) +
+    log_density(distribution.branches, transform_branches(tree))
+)
+
+# transformations
 
 function transform_last_divergence(tree::CladifiedTree)::CladifiedTree
     last_divergence = minimum(param for (clade, param) in tree.parameters if size(clade) == 2)

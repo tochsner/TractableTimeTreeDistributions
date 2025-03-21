@@ -3,16 +3,14 @@ struct HeightRatioDist{H,R} <: AbstractDistribution
     ratios::AbstractDistribution
 end
 
-function HeightRatioDist{H,R}(trees::Vector{CladifiedTree}) where {H,R}
-    HeightRatioDist{H,R}(
-        H(transform_height.(trees)),
-        R(transform_ratios.(trees))
-    )
-end
+HeightRatioDist{H,R}(trees::Vector{CladifiedTree}) where {H,R} = HeightRatioDist{H,R}(
+    H(transform_height.(trees)),
+    R(transform_ratios.(trees))
+)
 
-function readable_name(distribution::Type{HeightRatioDist{H, R}}) where {H, R}
-    "Height ($(readable_name(H))), Ratios ($(readable_name(R)))"
-end
+readable_name(distribution::Type{HeightRatioDist{H,R}}) where {H,R} = "Height ($(readable_name(H))), Ratios ($(readable_name(R)))"
+
+# higher-level functions
 
 function point_estimate(distribution::HeightRatioDist, tree::CladifiedTree)::CladifiedTree
     map_tree_with_height = point_estimate(distribution.height, tree)
@@ -34,13 +32,13 @@ function sample_tree(distribution::HeightRatioDist, tree::CladifiedTree)::Cladif
     return (invert_ratios ∘ invert_height)(sampled_tree_with_height_and_ratios)
 end
 
-function log_density(distribution::HeightRatioDist, tree::CladifiedTree)
-    (
-        log_density(distribution.height, transform_height(tree)) +
-        log_density(distribution.ratios, transform_ratios(tree)) +
-        log_abs_det_jacobian(distribution, tree)
-    )
-end
+log_density(distribution::HeightRatioDist, tree::CladifiedTree) = (
+    log_density(distribution.height, transform_height(tree)) +
+    log_density(distribution.ratios, transform_ratios(tree)) +
+    log_abs_det_jacobian(distribution, tree)
+)
+
+# transformations
 
 function transform_height(tree::CladifiedTree)::CladifiedTree
     CladifiedTree(Dict(tree.root => tree.parameters[tree.root]), tree)

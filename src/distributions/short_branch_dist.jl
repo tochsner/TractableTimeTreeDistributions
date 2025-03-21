@@ -2,35 +2,26 @@ struct ShorterBranchDist{B} <: AbstractDistribution
     branches::AbstractDistribution
 end
 
-function ShorterBranchDist{B}(trees::Vector{CladifiedTree}) where {B}
-    ShorterBranchDist{B}(B(transform_short_branches.(trees)))
-end
+ShorterBranchDist{B}(trees::Vector{CladifiedTree}) where {B} = ShorterBranchDist{B}(B(transform_short_branches.(trees)))
 
-function readable_name(distribution::Type{ShorterBranchDist{B}}) where {B}
-    "Shortest Branch ($(readable_name(B)))"
-end
+readable_name(::Type{ShorterBranchDist{B}}) where {B} = "Shortest Branch ($(readable_name(B)))"
 
-function sample_tree(distribution::ShorterBranchDist, tree::CladifiedTree)::CladifiedTree
-    sample_tree(distribution.branches, tree) |> invert_short_branches
-end
+# high-level functions
 
-function point_estimate(distribution::ShorterBranchDist, tree::CladifiedTree)
-    point_estimate(distribution.branches, tree) |> invert_short_branches
-end
+sample_tree(distribution::ShorterBranchDist, tree::CladifiedTree)::CladifiedTree = sample_tree(distribution.branches, tree) |> invert_short_branches
+point_estimate(distribution::ShorterBranchDist, tree::CladifiedTree) = point_estimate(distribution.branches, tree) |> invert_short_branches
+log_density(distribution::ShorterBranchDist, tree::CladifiedTree) = log_density(distribution.branches, transform_short_branches(tree))
 
-function log_density(distribution::ShorterBranchDist, tree::CladifiedTree)
-    log_density(distribution.branches, transform_short_branches(tree))
-end
+# transformations
 
-function transform_short_branches(tree::CladifiedTree)::CladifiedTree
-    CladifiedTree(
-        Dict(
-            s.parent => tree.parameters[s.parent] - max(get(tree.parameters, s.clade1, 0.0), get(tree.parameters, s.clade2, 0.0))
-            for s in values(tree.splits)
-        ),
-        tree
-    )
-end
+transform_short_branches(tree::CladifiedTree)::CladifiedTree = CladifiedTree(
+    Dict(
+        s.parent => tree.parameters[s.parent] - max(get(tree.parameters, s.clade1, 0.0), get(tree.parameters, s.clade2, 0.0))
+        for s in values(tree.splits)
+    ),
+    tree
+)
+
 
 function invert_short_branches(tree::CladifiedTree)::CladifiedTree
     root_split = tree.splits[tree.root]
