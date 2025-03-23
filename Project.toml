@@ -1,4 +1,4 @@
-name = "TractableTreeDistributions"
+name = "TractableTimeTreeDistributions"
 uuid = "1ed903b1-d65e-4243-bae3-7d6e2e5f54a0"
 authors = ["Tobia Ochsner <tobia.ochsner@hotmail.com>"]
 version = "0.1.0"

@@ -1,4 +1,4 @@
-using TractableTreeDistributions
+using TractableTimeTreeDistributions
 using Distributions
 using Logging
 using Plots

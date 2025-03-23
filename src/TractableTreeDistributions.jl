@@ -1,4 +1,4 @@
-module TractableTreeDistributions
+module TractableTimeTreeDistributions
 
 using StatsBase
 using DataStructures
@@ -53,4 +53,4 @@ export mrca_tree
 export readable_name
 export robinson_foulds_distance, get_ess
 
-end # module TractableTreeDistributions
+end # module TractableTimeTreeDistributions

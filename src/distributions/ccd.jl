@@ -41,9 +41,9 @@ end
 function collect_sampled_splits!(ccd::CCD, current_clade::Leaf, sampled_splits::Dict{Clade,Split}) end
 
 
-TractableTreeDistributions.entropy(ccd::CCD) = entropy(ccd, ccd.root_clade)
-@memoize TractableTreeDistributions.entropy(ccd::CCD, clade::Clade) = sum(
+TractableTimeTreeDistributions.entropy(ccd::CCD) = entropy(ccd, ccd.root_clade)
+@memoize TractableTimeTreeDistributions.entropy(ccd::CCD, clade::Clade) = sum(
     -exp(log_density(ccd, split)) * (log_density(ccd, split) - entropy(ccd, split.clade1) - entropy(ccd, split.clade2))
     for split in ccd.splits_per_clade[clade]
 )
-TractableTreeDistributions.entropy(::CCD, ::Leaf) = 0.0
+TractableTimeTreeDistributions.entropy(::CCD, ::Leaf) = 0.0
