@@ -8,10 +8,6 @@ using SpecialFunctions
 
 # utils
 
-
-
-
-
 include("utils/trees.jl")
 
 export load_trees, load_trees_from_newick, write_tree
