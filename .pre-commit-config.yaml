@@ -6,4 +6,5 @@ repos:
       language: system
       entry: bash -c 'make format'
       pass_filenames: false
+      files: ^src
       
