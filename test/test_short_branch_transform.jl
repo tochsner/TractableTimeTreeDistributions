@@ -10,7 +10,7 @@
 end
 
 @testset "parameterize another tree with four taxa" begin
-    newick = "((A:1,B:1):2,(C:2,D:2):1):0;" 
+    newick = "((A:1,B:1):2,(C:2,D:2):1):0;"
     trees = load_trees_from_newick(newick)
     cladified_trees = map(cladify_tree, trees)
 
@@ -48,7 +48,7 @@ end
 end
 
 @testset "set heights for another tree with four taxa" begin
-    newick = "((A:1,B:1):2,(C:2,D:2):1):0;" 
+    newick = "((A:1,B:1):2,(C:2,D:2):1):0;"
     trees = load_trees_from_newick(newick)
     cladified_trees = map(cladify_tree, trees)
 

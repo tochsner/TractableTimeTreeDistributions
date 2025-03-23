@@ -1,15 +1,12 @@
 @testset "test expansion of ccd0 with two trees and five taxa" begin
-    newicks = [
-        "(((A, B), C), (D, E));",
-        "((A, (B, (C, D))), E);",
-    ]
+    newicks = ["(((A, B), C), (D, E));", "((A, (B, (C, D))), E);"]
     trees = load_trees_from_newick(newicks) .|> cladify_tree
 
     ccd = CCD0(trees)
 
     @test ccd.num_taxa == 5
     @test ccd.root_clade == Clade(1:5, 5)
-    
+
     @test Clade([1, 2], 5) in ccd.clades
     @test Clade([1, 2, 3], 5) in ccd.clades
     @test Clade([4, 5], 5) in ccd.clades
@@ -37,18 +34,14 @@
 end
 
 @testset "test expansion of ccd0 with three trees and five taxa" begin
-    newicks = [
-        "(((A, B), C), (D, E));",
-        "(((A, (B, C)), D), E);",
-        "(((A, (B, C)), E), D);",
-    ]
+    newicks = ["(((A, B), C), (D, E));", "(((A, (B, C)), D), E);", "(((A, (B, C)), E), D);"]
     trees = load_trees_from_newick(newicks) .|> cladify_tree
 
     ccd = CCD0(trees)
 
     @test ccd.num_taxa == 5
     @test ccd.root_clade == Clade(1:5, 5)
-    
+
     @test Clade([1, 2], 5) in ccd.clades
     @test Clade([4, 5], 5) in ccd.clades
     @test Clade([1, 2, 3], 5) in ccd.clades

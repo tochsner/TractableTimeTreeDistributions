@@ -7,7 +7,7 @@ function load_trees(mcmc_path::String)::Vector{Tree}
     if 0 < length(trees)
         return trees
     end
-        
+
     open(mcmc_path) do io
         return map(readnewick, io |> eachline)
     end

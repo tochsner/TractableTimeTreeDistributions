@@ -48,8 +48,8 @@ end
     trees_with_branches = transform_branches.(cladified_trees)
     trees_with_last_divergence = transform_last_divergence.(cladified_trees)
     trees_with_both = [
-        CladifiedTree(merge(tr.parameters, th.parameters), tr)
-        for (tr, th) in zip(trees_with_branches, trees_with_last_divergence)
+        CladifiedTree(merge(tr.parameters, th.parameters), tr) for
+        (tr, th) in zip(trees_with_branches, trees_with_last_divergence)
     ]
 
     recovered_trees = invert_last_divergence_branches.(trees_with_both)
@@ -67,8 +67,8 @@ end
     trees_with_branches = transform_branches.(cladified_trees)
     trees_with_last_divergence = transform_last_divergence.(cladified_trees)
     trees_with_both = [
-        CladifiedTree(merge(tr.parameters, th.parameters), tr)
-        for (tr, th) in zip(trees_with_branches, trees_with_last_divergence)
+        CladifiedTree(merge(tr.parameters, th.parameters), tr) for
+        (tr, th) in zip(trees_with_branches, trees_with_last_divergence)
     ]
 
     recovered_trees = invert_last_divergence_branches.(trees_with_both)
@@ -86,8 +86,8 @@ end
     trees_with_branches = transform_branches.(cladified_trees)
     trees_with_last_divergence = transform_last_divergence.(cladified_trees)
     trees_with_both = [
-        CladifiedTree(merge(tr.parameters, th.parameters), tr)
-        for (tr, th) in zip(trees_with_branches, trees_with_last_divergence)
+        CladifiedTree(merge(tr.parameters, th.parameters), tr) for
+        (tr, th) in zip(trees_with_branches, trees_with_last_divergence)
     ]
 
     recovered_trees = invert_last_divergence_branches.(trees_with_both)

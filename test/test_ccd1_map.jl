@@ -1,9 +1,5 @@
 @testset "test ccd map with two trees and four taxa" begin
-    newicks = [
-        "((A:1,B:1):1,(C:1,D:1):1):1;",
-        "((A:1,B:1):1,(C:1,D:1):1):1;",
-        "(A:1,(B:1,(C:1,D:1):1));",
-    ]
+    newicks = ["((A:1,B:1):1,(C:1,D:1):1):1;", "((A:1,B:1):1,(C:1,D:1):1):1;", "(A:1,(B:1,(C:1,D:1):1));"]
     trees = load_trees_from_newick(newicks)
 
     ccd = CCD1(trees)
@@ -15,11 +11,7 @@
 end
 
 @testset "test ccd map with two other trees and four taxa" begin
-    newicks = [
-        "((A:1,B:1):1,(C:1,D:1):1):1;",
-        "(A:1,(B:1,(C:1,D:1):1));",
-        "(A:1,(B:1,(C:1,D:1):1));",
-    ]
+    newicks = ["((A:1,B:1):1,(C:1,D:1):1):1;", "(A:1,(B:1,(C:1,D:1):1));", "(A:1,(B:1,(C:1,D:1):1));"]
     trees = load_trees_from_newick(newicks)
 
     ccd = CCD1(trees)

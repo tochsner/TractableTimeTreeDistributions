@@ -1,0 +1,9 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+    - id: format
+      language: system
+      entry: bash -c 'make format'
+      pass_filenames: false
+      

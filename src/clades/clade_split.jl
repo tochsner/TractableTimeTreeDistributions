@@ -17,11 +17,11 @@ end
 Split(clade1::AbstractClade, clade2::AbstractClade) = Split(clade1, clade2, union(clade1, clade2))
 
 Base.:(==)(split1::Split, split2::Split) = (
-    split1.hash == split2.hash
-    && split1.clade1.hash == split2.clade1.hash
-    && split1.clade2.hash == split2.clade2.hash
-    && split1.clade1 == split2.clade1
-    && split1.clade2 == split2.clade2
+    split1.hash == split2.hash &&
+    split1.clade1.hash == split2.clade1.hash &&
+    split1.clade2.hash == split2.clade2.hash &&
+    split1.clade1 == split2.clade1 &&
+    split1.clade2 == split2.clade2
 )
 Base.hash(split::Split, h::UInt) = split.hash
 Base.in(clade::AbstractClade, split::Split) = split.clade1 == clade || split.clade2 == clade

@@ -7,7 +7,13 @@ struct CladifiedTree
 end
 
 function CladifiedTree(new_parameters::Dict{Clade,Float64}, cladified_tree::CladifiedTree)
-    CladifiedTree(cladified_tree.tip_names, cladified_tree.root, cladified_tree.splits, cladified_tree.heights, new_parameters)
+    CladifiedTree(
+        cladified_tree.tip_names,
+        cladified_tree.root,
+        cladified_tree.splits,
+        cladified_tree.heights,
+        new_parameters,
+    )
 end
 
 function cladify_tree(tree::Tree)::CladifiedTree
@@ -48,7 +54,7 @@ function cladify_node(
     split_visitor,
     tip_indices::Dict{String,Int},
     num_taxa::Int,
-    heights::Dict{AbstractClade,Float64}
+    heights::Dict{AbstractClade,Float64},
 )
     if isleaf(node)
         taxa_index = tip_indices[node.name]
@@ -63,10 +69,10 @@ function cladify_node(
     clade2 = cladify_node(children[2], clade_visitor, split_visitor, tip_indices, num_taxa, heights)
 
     combined_clade = union(clade1, clade2)
-    
+
     combined_clade_height = heights[clade1] + getparentedge(children[1]).length
     heights[combined_clade] = combined_clade_height
-    
+
     clade_visitor(combined_clade, combined_clade_height)
 
     split = Split(clade1, clade2, combined_clade)

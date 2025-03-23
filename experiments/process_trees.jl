@@ -10,9 +10,9 @@ distributions = [
     ShorterBranchDist{IndependentDist{LogNormal}}
     ShorterBranchDist{IndependentDist{Gamma}}
     ShorterBranchDist{IndependentDist{Weibull}}
-    LastDivergenceBranchDist{IndependentDist{LogNormal}, IndependentDist{LogNormal}}
-    LastDivergenceBranchDist{IndependentDist{Gamma}, IndependentDist{Gamma}}
-    LastDivergenceBranchDist{IndependentDist{Weibull}, IndependentDist{Weibull}}
+    LastDivergenceBranchDist{IndependentDist{LogNormal},IndependentDist{LogNormal}}
+    LastDivergenceBranchDist{IndependentDist{Gamma},IndependentDist{Gamma}}
+    LastDivergenceBranchDist{IndependentDist{Weibull},IndependentDist{Weibull}}
 ]
 num_samples = 10_000
 train_fraction = 0.75
@@ -38,7 +38,7 @@ cladified_trees = cladify_tree.(trees)
 @info "Calculate tree ESS and subsample trees down to ESS"
 
 tree_ess = get_ess(cladified_trees)
-trees_subsampled = sample(cladified_trees, floor(Int, tree_ess); replace=false, ordered=true)
+trees_subsampled = sample(cladified_trees, floor(Int, tree_ess); replace = false, ordered = true)
 
 @info "Split into train and val set for validation"
 
@@ -49,10 +49,7 @@ trees_val = trees_subsampled[num_train_trees+1:end]
 @info "Fit distributions on train set"
 
 ccd_train = CCD1(trees_train)
-distributions_train = [
-    distribution(trees_train)
-    for distribution in distributions
-]
+distributions_train = [distribution(trees_train) for distribution in distributions]
 
 @info "Validate distributions"
 
@@ -66,11 +63,11 @@ credible_sets_val = []
 for (i, distribution) in enumerate(distributions_train)
     log_densities_val = log_density.(Ref(distribution), trees_val) .+ log_ccd_densities_val
     finite_log_densities_val = filter(x -> -Inf < x, log_densities_val)
-    
+
     log_data_likelihood_val = 0 < length(finite_log_densities_val) ? finite_log_densities_val |> sum : -Inf
     push!(log_data_likelihoods_val, log_data_likelihood_val)
 
-    samples = [sample_tree(distribution, sample_tree(ccd_train)) for _ in 1:num_samples]
+    samples = [sample_tree(distribution, sample_tree(ccd_train)) for _ = 1:num_samples]
     log_densities_samples = log_density.(Ref(distribution), samples) .+ log_density.(Ref(ccd_train), samples)
 
     ad_test = KSampleADTest(log_densities_val, log_densities_samples)
@@ -87,10 +84,7 @@ end
 @info "Get point estimates based on all ESS trees"
 
 ccd_subsampled = CCD1(trees_subsampled)
-distributions_subsampled = [
-    distribution(trees_subsampled)
-    for distribution in distributions
-]
+distributions_subsampled = [distribution(trees_subsampled) for distribution in distributions]
 
 ccd_map_tree = point_estimate(ccd_subsampled)
 point_estimates = point_estimate.(distributions_subsampled, Ref(ccd_map_tree))
@@ -131,8 +125,8 @@ end
 point_estimate_file = joinpath(output_dir, "$(base_file_name)_point_estimate.trees")
 open(point_estimate_file, "w") do io
     write_tree(
-        io, 
-        push!(map(x -> "'$(x)'", readable_name.(distributions)), "'MRCA'"), 
-        push!(point_estimates, mrca_point_estimate)
+        io,
+        push!(map(x -> "'$(x)'", readable_name.(distributions)), "'MRCA'"),
+        push!(point_estimates, mrca_point_estimate),
     )
 end

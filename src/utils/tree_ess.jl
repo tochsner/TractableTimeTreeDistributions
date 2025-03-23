@@ -1,6 +1,6 @@
 using MCMCDiagnosticTools
 
-get_ess(distances_to_map_tree::Vector) = ess(distances_to_map_tree, split_chains=1)
+get_ess(distances_to_map_tree::Vector) = ess(distances_to_map_tree, split_chains = 1)
 
 function get_ess(cladified_trees::Vector{CladifiedTree})
     total_branch_lengths = [sum(values(tree.parameters)) for tree in cladified_trees]

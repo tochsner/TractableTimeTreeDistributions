@@ -44,7 +44,17 @@ function CCD1(cladified_trees::Vector{CladifiedTree})
         end
     end
 
-    return CCD1(num_taxa, num_trees, tip_names, root_clade, clades, splits, splits_per_clade, num_clade_occurrences, num_split_occurrences)
+    return CCD1(
+        num_taxa,
+        num_trees,
+        tip_names,
+        root_clade,
+        clades,
+        splits,
+        splits_per_clade,
+        num_clade_occurrences,
+        num_split_occurrences,
+    )
 end
 
 readable_name(ccd::Type{CCD1}) = "CCD1"

@@ -12,14 +12,14 @@
 end
 
 @testset "parameterize another tree with four taxa" begin
-    newick = "((A:1,B:1):2,(C:2,D:2):1):0;" 
+    newick = "((A:1,B:1):2,(C:2,D:2):1):0;"
     trees = load_trees_from_newick(newick)
     cladified_trees = map(cladify_tree, trees)
 
     trees_with_ratios = transform_ratios.(cladified_trees)
     @test trees_with_ratios[1].parameters[Clade(1:2, 4)] ≈ 2 / 3
     @test trees_with_ratios[1].parameters[Clade(3:4, 4)] ≈ 1 / 3
-    
+
     trees_with_heights = transform_height.(cladified_trees)
     @test trees_with_heights[1].parameters[Clade(1:4, 4)] ≈ 3
 end
@@ -48,8 +48,7 @@ end
     trees_with_ratios = transform_ratios.(cladified_trees)
     trees_with_height = transform_height.(cladified_trees)
     trees_with_both = [
-        CladifiedTree(merge(tr.parameters, th.parameters), tr) 
-        for (tr, th) in zip(trees_with_ratios, trees_with_height)
+        CladifiedTree(merge(tr.parameters, th.parameters), tr) for (tr, th) in zip(trees_with_ratios, trees_with_height)
     ]
 
     recovered_trees = invert_ratios.(invert_height.(trees_with_both))
@@ -60,15 +59,14 @@ end
 end
 
 @testset "set heights for another tree with four taxa" begin
-    newick = "((A:1,B:1):2,(C:2,D:2):1):0;" 
+    newick = "((A:1,B:1):2,(C:2,D:2):1):0;"
     trees = load_trees_from_newick(newick)
     cladified_trees = map(cladify_tree, trees)
 
     trees_with_ratios = transform_ratios.(cladified_trees)
     trees_with_height = transform_height.(cladified_trees)
     trees_with_both = [
-        CladifiedTree(merge(tr.parameters, th.parameters), tr) 
-        for (tr, th) in zip(trees_with_ratios, trees_with_height)
+        CladifiedTree(merge(tr.parameters, th.parameters), tr) for (tr, th) in zip(trees_with_ratios, trees_with_height)
     ]
 
     recovered_trees = invert_ratios.(invert_height.(trees_with_both))
@@ -86,8 +84,7 @@ end
     trees_with_ratios = transform_ratios.(cladified_trees)
     trees_with_height = transform_height.(cladified_trees)
     trees_with_both = [
-        CladifiedTree(merge(tr.parameters, th.parameters), tr) 
-        for (tr, th) in zip(trees_with_ratios, trees_with_height)
+        CladifiedTree(merge(tr.parameters, th.parameters), tr) for (tr, th) in zip(trees_with_ratios, trees_with_height)
     ]
 
     recovered_trees = invert_ratios.(invert_height.(trees_with_both))

@@ -8,7 +8,7 @@ end
     clade_1 = Clade([1, 2], 10)
     clade_2 = Clade([1, 2, 3], 10)
     clade_3 = Clade([1, 2, 3, 4], 10)
-    
+
     @test clade_1 in clade_1
     @test clade_1 in clade_2
     @test clade_1 in clade_3
@@ -26,7 +26,7 @@ end
     leaf_clade_1 = Clade(1, 10)
     leaf_clade_2 = Clade(2, 10)
     leaf_clade_3 = Clade(3, 10)
-    
+
     clade_1_2 = union(leaf_clade_1, leaf_clade_2)
     @test 1 in clade_1_2
     @test 2 in clade_1_2

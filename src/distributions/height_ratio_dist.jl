@@ -3,22 +3,19 @@ struct HeightRatioDist{H,R} <: AbstractDistribution
     ratios::AbstractDistribution
 end
 
-HeightRatioDist{H,R}(trees::Vector{CladifiedTree}) where {H,R} = HeightRatioDist{H,R}(
-    H(transform_height.(trees)),
-    R(transform_ratios.(trees))
-)
+HeightRatioDist{H,R}(trees::Vector{CladifiedTree}) where {H,R} =
+    HeightRatioDist{H,R}(H(transform_height.(trees)), R(transform_ratios.(trees)))
 
-readable_name(distribution::Type{HeightRatioDist{H,R}}) where {H,R} = "Height ($(readable_name(H))), Ratios ($(readable_name(R)))"
+readable_name(distribution::Type{HeightRatioDist{H,R}}) where {H,R} =
+    "Height ($(readable_name(H))), Ratios ($(readable_name(R)))"
 
 # higher-level functions
 
 function point_estimate(distribution::HeightRatioDist, tree::CladifiedTree)::CladifiedTree
     map_tree_with_height = point_estimate(distribution.height, tree)
     map_tree_with_ratios = point_estimate(distribution.ratios, tree)
-    map_tree_with_height_and_ratios = CladifiedTree(
-        merge(map_tree_with_height.parameters, map_tree_with_ratios.parameters),
-        map_tree_with_height
-    )
+    map_tree_with_height_and_ratios =
+        CladifiedTree(merge(map_tree_with_height.parameters, map_tree_with_ratios.parameters), map_tree_with_height)
     return (invert_ratios ∘ invert_height)(map_tree_with_height_and_ratios)
 end
 
@@ -27,7 +24,7 @@ function sample_tree(distribution::HeightRatioDist, tree::CladifiedTree)::Cladif
     sampled_tree_with_ratios = sample_tree(distribution.ratios, tree)
     sampled_tree_with_height_and_ratios = CladifiedTree(
         merge(sampled_tree_with_height.parameters, sampled_tree_with_ratios.parameters),
-        sampled_tree_with_height
+        sampled_tree_with_height,
     )
     return (invert_ratios ∘ invert_height)(sampled_tree_with_height_and_ratios)
 end

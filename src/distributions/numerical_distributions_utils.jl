@@ -10,17 +10,17 @@ A wrapper for the fit_mle function from Distributions.jl with
 function Distributions.fit_mle(::Type{<:Weibull}, x::AbstractArray{<:Real})
     coefficient_of_variation = std(x) / mean(x)
     alpha0 = coefficient_of_variation^(-1.075)
-    fit_mle(Weibull, x, alpha0=alpha0)
+    fit_mle(Weibull, x, alpha0 = alpha0)
 end
 
 """
 A numerical bisection method to find the mode of a univariate
 LogitNormal distribution.
 """
-function Distributions.mode(d::LogitNormal; tol::Real=1e-16, maxiter::Int=1000)
+function Distributions.mode(d::LogitNormal; tol::Real = 1e-16, maxiter::Int = 1000)
     extrema = 1e-8
-    
-    solution = bisection(extrema, 1.0 - extrema; tol=tol, maxiter=maxiter) do x
+
+    solution = bisection(extrema, 1.0 - extrema; tol = tol, maxiter = maxiter) do x
         d.σ^2 * (2x - 1) + d.μ - (log(x) - log1p(-x))
     end
 
@@ -35,11 +35,11 @@ end
 """
 A simple Monte Carlo estimator for the mean of a LogitNormal distribution.
 """
-function Distributions.mean(d::LogitNormal; num_samples::Int=10_000)
+function Distributions.mean(d::LogitNormal; num_samples::Int = 10_000)
     return mean(rand(d, num_samples))
 end
 
-function bisection(f::Function, left::Real, right::Real; tol::Real=1e-8, maxiter::Int=1000)
+function bisection(f::Function, left::Real, right::Real; tol::Real = 1e-8, maxiter::Int = 1000)
     Δx = right - left
     ϵ = Δx / left
 

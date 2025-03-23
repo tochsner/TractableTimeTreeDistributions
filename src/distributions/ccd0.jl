@@ -42,7 +42,17 @@ function CCD0(cladified_trees::Vector{CladifiedTree})
         end
     end
 
-    ccd = CCD0(num_taxa, num_trees, tip_names, root_clade, clades, splits, splits_per_clade, num_clade_occurrences, num_split_occurrences)
+    ccd = CCD0(
+        num_taxa,
+        num_trees,
+        tip_names,
+        root_clade,
+        clades,
+        splits,
+        splits_per_clade,
+        num_clade_occurrences,
+        num_split_occurrences,
+    )
     expand_splits!(ccd)
 
     return ccd
@@ -60,7 +70,7 @@ function expand_splits!(ccd::CCD0)
             continue
         end
 
-        for size in 1:(size(parent)÷2)
+        for size = 1:(size(parent)÷2)
             for potential_child in clade_per_size[size]
                 if !(potential_child in parent)
                     continue
@@ -79,7 +89,7 @@ function expand_splits!(ccd::CCD0)
     end
 end
 
-readable_name(ccd::Type{CCD0})  ="CCD0"
+readable_name(ccd::Type{CCD0}) = "CCD0"
 
 function log_density(ccd::CCD0, split::Split)
     if min(
@@ -91,10 +101,8 @@ function log_density(ccd::CCD0, split::Split)
     end
 
     return (
-        log_clade_normalization(ccd, split.clade1) +
-        log_clade_normalization(ccd, split.clade2) -
-        log_clade_normalization(ccd, split.parent) +
-        log_clade_credibility(ccd, split.parent)
+        log_clade_normalization(ccd, split.clade1) + log_clade_normalization(ccd, split.clade2) -
+        log_clade_normalization(ccd, split.parent) + log_clade_credibility(ccd, split.parent)
     )
 end
 
@@ -104,8 +112,8 @@ end
     end
 
     split_log_probabilities = [
-        log_clade_normalization(ccd, split.clade1) + log_clade_normalization(ccd, split.clade2)
-        for split in ccd.splits_per_clade[clade]
+        log_clade_normalization(ccd, split.clade1) + log_clade_normalization(ccd, split.clade2) for
+        split in ccd.splits_per_clade[clade]
     ]
 
     # we use the log-sum-exp trick to compute the normalization constant in a numerically

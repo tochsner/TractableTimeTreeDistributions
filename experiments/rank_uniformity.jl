@@ -7,14 +7,12 @@ using StatsBase
 theme(:wong)
 
 function get_ecdf(distribution_constructor, ccd, ref_trees)
-    distribution = TractableTimeTreeDist(
-        ccd, distribution_constructor(cladify_tree.(ref_trees))
-    )
+    distribution = TractableTimeTreeDist(ccd, distribution_constructor(cladify_tree.(ref_trees)))
 
     ref_probabilities = log_density.(Ref(distribution), ref_trees)
     replace!(ref_probabilities, NaN => -Inf)
-    
-    sampled_trees = [sample_tree(distribution) for _ in 1:5000]
+
+    sampled_trees = [sample_tree(distribution) for _ = 1:5000]
     sample_probabilities = log_density.(Ref(distribution), sampled_trees)
 
     ecdf_func = ecdf(sample_probabilities)
@@ -35,16 +33,16 @@ function plot_rank_uniformity(distribution_constructors, tree_file)
 
     @info "Plot ECDFs"
     n = length(ecdfs[1])
-    plot([0, length(ecdfs[1])], [0, 1.0]; c = :black, lw = 1, label=nothing)
-    plot!(ecdfs, label=permutedims(readable_name.(distribution_constructors)))
+    plot([0, length(ecdfs[1])], [0, 1.0]; c = :black, lw = 1, label = nothing)
+    plot!(ecdfs, label = permutedims(readable_name.(distribution_constructors)))
     plot!(
-        xticks=0:0.25 * n:n, 
-        yticks=0:0.25:1,
-        size=(750, 500),
-        legend=:topright,
+        xticks = 0:0.25*n:n,
+        yticks = 0:0.25:1,
+        size = (750, 500),
+        legend = :topright,
         yflip = true,
         yformatter = y -> "$(100 * y) %",
-        xformatter = x -> "$(100 * x / n) %"
+        xformatter = x -> "$(100 * x / n) %",
     )
     xlabel!("Fraction of Reference Trees in Credible Set")
     ylabel!("Credible Set")
@@ -58,10 +56,10 @@ distribution_constructors = [
     # LastDivergenceBranchDist{IndependentDist{LogNormal}, IndependentDist{LogNormal}}
     # LastDivergenceBranchDist{IndependentDist{Gamma}, IndependentDist{Gamma}}
     HeightRatioDist{IndependentDist{LogNormal},IndependentDist{LogitNormal}},
-    LastDivergenceBranchDist{IndependentDist{Gamma},IndependentDist{Gamma}}
+    LastDivergenceBranchDist{IndependentDist{Gamma},IndependentDist{Gamma}},
 ]
 
 plot_rank_uniformity(
     distribution_constructors,
-    "/Users/tobiaochsner/Documents/Thesis/Validation/data/mcmc_runs/yule-50_40.trees"
+    "/Users/tobiaochsner/Documents/Thesis/Validation/data/mcmc_runs/yule-50_40.trees",
 )

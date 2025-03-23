@@ -12,7 +12,7 @@ function get_ref_probabilities(distribution, ref_trees)
 end
 
 function get_sample_probabilities(distribution)
-    sampled_trees = [sample_tree(distribution) for _ in 1:10000]
+    sampled_trees = [sample_tree(distribution) for _ = 1:10000]
     sample_probabilities = log_density.(Ref(distribution), sampled_trees)
     return exp.(sample_probabilities)
 end
@@ -39,50 +39,19 @@ function plot_rank_uniformity(distribution_constructors, tree_file)
     ks_statistics = get_ks_statistic.(ref_probabilities, sample_probabilities)
     n = length(ks_statistics)
     palette = cgrad(:Set2_8)
-    plot(
-        size=(750, 500),
-        xticks=false,
-        xticklabels=false,
-        legend=:outerbottom,
-    )
-    bar!(
-        (1:n)', 
-        ks_statistics', 
-        label=permutedims(readable_name.(distribution_constructors)),
-        color=palette[1:n]'
-    )
-    
+    plot(size = (750, 500), xticks = false, xticklabels = false, legend = :outerbottom)
+    bar!((1:n)', ks_statistics', label = permutedims(readable_name.(distribution_constructors)), color = palette[1:n]')
+
     ylabel!("KS Statistic")
 end
 
 distributions = [
-    TractableTimeTreeDist{
-        CCD1,
-        HeightRatioDist{IndependentDist{LogNormal},IndependentDist{LogitNormal}}
-    },
-    TractableTimeTreeDist{
-        CCD1,
-        HeightRatioDist{IndependentDist{LogNormal},IndependentDist{Beta}}
-    },
-    TractableTimeTreeDist{
-        CCD1,
-        ShorterBranchDist{IndependentDist{LogNormal}}   
-    },
-    TractableTimeTreeDist{
-        CCD1,   
-        ShorterBranchDist{IndependentDist{Gamma}}
-    },
-    TractableTimeTreeDist{
-        CCD1,
-        LastDivergenceBranchDist{IndependentDist{LogNormal}, IndependentDist{LogNormal}}
-    },
-    TractableTimeTreeDist{
-        CCD1,
-        LastDivergenceBranchDist{IndependentDist{Gamma}, IndependentDist{Gamma}}
-    }
+    TractableTimeTreeDist{CCD1,HeightRatioDist{IndependentDist{LogNormal},IndependentDist{LogitNormal}}},
+    TractableTimeTreeDist{CCD1,HeightRatioDist{IndependentDist{LogNormal},IndependentDist{Beta}}},
+    TractableTimeTreeDist{CCD1,ShorterBranchDist{IndependentDist{LogNormal}}},
+    TractableTimeTreeDist{CCD1,ShorterBranchDist{IndependentDist{Gamma}}},
+    TractableTimeTreeDist{CCD1,LastDivergenceBranchDist{IndependentDist{LogNormal},IndependentDist{LogNormal}}},
+    TractableTimeTreeDist{CCD1,LastDivergenceBranchDist{IndependentDist{Gamma},IndependentDist{Gamma}}},
 ]
 
-plot_rank_uniformity(
-    distributions,
-    "/Users/tobiaochsner/Documents/Thesis/Validation/data/mcmc_runs/yule-10_1.trees"
-)
+plot_rank_uniformity(distributions, "/Users/tobiaochsner/Documents/Thesis/Validation/data/mcmc_runs/yule-10_1.trees")

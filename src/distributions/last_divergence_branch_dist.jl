@@ -3,32 +3,26 @@ struct LastDivergenceBranchDist{D,B} <: AbstractDistribution
     branches::AbstractDistribution
 end
 
-LastDivergenceBranchDist{D,B}(trees::Vector{CladifiedTree}) where {D,B} = LastDivergenceBranchDist{D,B}(
-    D(transform_last_divergence.(trees)),
-    B(transform_branches.(trees))
-)
+LastDivergenceBranchDist{D,B}(trees::Vector{CladifiedTree}) where {D,B} =
+    LastDivergenceBranchDist{D,B}(D(transform_last_divergence.(trees)), B(transform_branches.(trees)))
 
-readable_name(::Type{LastDivergenceBranchDist{D,B}}) where {D,B} = "Last Divergence ($(readable_name(D))), Branches ($(readable_name(B)))"
+readable_name(::Type{LastDivergenceBranchDist{D,B}}) where {D,B} =
+    "Last Divergence ($(readable_name(D))), Branches ($(readable_name(B)))"
 
 # high-level functions
 
 function sample_tree(distribution::LastDivergenceBranchDist, tree::CladifiedTree)::CladifiedTree
     sampled_tree_with_branches = sample_tree(distribution.branches, tree)
     sampled_tree_with_last_div = sample_tree(distribution.last_div, tree)
-    sampled_tree = CladifiedTree(
-        merge(sampled_tree_with_last_div.parameters, sampled_tree_with_branches.parameters),
-        tree
-    )
+    sampled_tree =
+        CladifiedTree(merge(sampled_tree_with_last_div.parameters, sampled_tree_with_branches.parameters), tree)
     return invert_last_divergence_branches(sampled_tree)
 end
 
 function point_estimate(distribution::LastDivergenceBranchDist, tree::CladifiedTree)
     map_tree_with_branches = point_estimate(distribution.branches, tree)
     map_tree_with_last_div = point_estimate(distribution.last_div, tree)
-    map_tree = CladifiedTree(
-        merge(map_tree_with_last_div.parameters, map_tree_with_branches.parameters),
-        tree
-    )
+    map_tree = CladifiedTree(merge(map_tree_with_last_div.parameters, map_tree_with_branches.parameters), tree)
     return invert_last_divergence_branches(map_tree)
 end
 
@@ -67,18 +61,18 @@ function invert_last_divergence_branches(tree::CladifiedTree)::CladifiedTree
     current_last_divergence = minimum(param for (clade, param) in tree.parameters if size(clade) == 2)
     actual_last_divergence = tree.parameters[tree.root]
     new_parameters = Dict(
-        clade => old_param - current_last_divergence + actual_last_divergence
-        for (clade, old_param) in tree.parameters if !is_leaf(clade)
+        clade => old_param - current_last_divergence + actual_last_divergence for
+        (clade, old_param) in tree.parameters if !is_leaf(clade)
     )
 
     return CladifiedTree(new_parameters, tree)
 end
 
-function set_height_from_branches!(tree::CladifiedTree, clade::Clade, parent_height::Float64,)
+function set_height_from_branches!(tree::CladifiedTree, clade::Clade, parent_height::Float64)
     tree.parameters[clade] = parent_height - tree.parameters[clade]
 
     split = tree.splits[clade]
     set_height_from_branches!(tree, split.clade1, tree.parameters[clade])
     set_height_from_branches!(tree, split.clade2, tree.parameters[clade])
 end
-function set_height_from_branches!(parameterized_tree::CladifiedTree, clade::Leaf, parent_height::Float64,) end
+function set_height_from_branches!(parameterized_tree::CladifiedTree, clade::Leaf, parent_height::Float64) end

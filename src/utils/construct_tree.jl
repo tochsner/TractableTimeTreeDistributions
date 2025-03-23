@@ -24,9 +24,11 @@ function construct_tree!(clade::Clade, cladified_tree::CladifiedTree, tree::Phyl
 end
 construct_tree!(clade::Leaf, cladified_tree, tree) = Phylo.createnode!(tree, clade.name)
 
-write_tree(path::String, cladified_tree::CladifiedTree) = Phylo.write(path, construct_tree(cladified_tree), format=Phylo.Nexus())
-write_tree(io::IOStream, cladified_tree::CladifiedTree) = Phylo.write(io, construct_tree(cladified_tree), format=Phylo.Nexus())
-write_tree(io::IOStream, labels::Vector{String}, cladified_trees::Vector{CladifiedTree}) = Phylo.write(io, Phylo.TreeSet(Dict(
-    l => construct_tree(cladified_tree)
-    for (l, cladified_tree) in zip(labels, cladified_trees)
-)))
+write_tree(path::String, cladified_tree::CladifiedTree) =
+    Phylo.write(path, construct_tree(cladified_tree), format = Phylo.Nexus())
+write_tree(io::IOStream, cladified_tree::CladifiedTree) =
+    Phylo.write(io, construct_tree(cladified_tree), format = Phylo.Nexus())
+write_tree(io::IOStream, labels::Vector{String}, cladified_trees::Vector{CladifiedTree}) = Phylo.write(
+    io,
+    Phylo.TreeSet(Dict(l => construct_tree(cladified_tree) for (l, cladified_tree) in zip(labels, cladified_trees))),
+)

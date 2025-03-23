@@ -44,25 +44,21 @@ end
 readable_name(::Type{IndependentDist{D}}) where {D} = readable_name(D)
 
 function sample_tree(distribution::IndependentDist{D}, tree::CladifiedTree)::CladifiedTree where {D}
-    parameters = Dict(
-        clade => rand(dist) for (clade, dist) in distribution.distributions
-    )
+    parameters = Dict(clade => rand(dist) for (clade, dist) in distribution.distributions)
     return CladifiedTree(parameters, tree)
 end
 
 function point_estimate(distribution::IndependentDist{D}, tree::CladifiedTree)::CladifiedTree where {D}
     parameters = Dict(
-        clade => mean(distribution.distributions[clade])
-        for clade in keys(tree.splits)
-        if haskey(distribution.distributions, clade)
+        clade => mean(distribution.distributions[clade]) for
+        clade in keys(tree.splits) if haskey(distribution.distributions, clade)
     )
     return CladifiedTree(parameters, tree)
 end
 
 function log_density(distribution::IndependentDist{D}, tree::CladifiedTree) where {D}
     sum(
-        haskey(distribution.distributions, clade) ?
-        logpdf(distribution.distributions[clade], param)
-        : 0.0 for (clade, param) in tree.parameters
+        haskey(distribution.distributions, clade) ? logpdf(distribution.distributions[clade], param) : 0.0 for
+        (clade, param) in tree.parameters
     )
 end
