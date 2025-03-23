@@ -6,29 +6,32 @@ using Memoization
 using Distributions
 using SpecialFunctions
 
-# utils
-
 include("utils/trees.jl")
 
-export load_trees, load_trees_from_newick, write_tree
-
-# Clades
+export load_trees
+export load_trees_from_newick
+export write_tree
 
 include("clades/clade.jl")
 include("clades/clade_split.jl")
 include("clades/cladify_tree.jl")
 
-export AbstractClade, Leaf, Clade, Split, TreeWithClades, cladify_tree
-export CCD1, CCD0, fit, log_density, point_estimate
-
+export AbstractClade
+export Leaf
+export Clade
+export Split
+export TreeWithClades
+export cladify_tree
+export CCD1
+export CCD0
+export fit
+export log_density
+export point_estimate
 export construct_tree
 
 include("utils/construct_tree.jl")
-
 include("utils/rf_distance.jl")
 include("utils/tree_ess.jl")
-
-# Distributions
 
 include("distributions/distribution.jl")
 include("distributions/short_branch_dist.jl")
@@ -43,21 +46,27 @@ include("distributions/last_divergence_branch_dist.jl")
 include("distributions/mrca.jl")
 include("distributions/numerical_distributions_utils.jl")
 
-export CladifiedTree, TractableTimeTreeDist, TreeDirichletDist
-export LastDivergenceBranchDist, transform_last_divergence, transform_branches, invert_last_divergence_branches
-export HeightRatioDist,
-    transform_height,
-    transform_ratios,
-    invert_height,
-    invert_ratios,
-    transform_short_branches,
-    invert_short_branches,
-    ShorterBranchDist
-export IndependentDist, sample_tree, MultivariateDist, get_entropy
-
+export CladifiedTree
+export TractableTimeTreeDist
+export TreeDirichletDist
+export LastDivergenceBranchDist
+export transform_last_divergence
+export transform_branches
+export invert_last_divergence_branches
+export HeightRatioDist
+export transform_height
+export transform_ratios
+export invert_height
+export invert_ratios
+export transform_short_branches
+export invert_short_branches
+export ShorterBranchDist
+export IndependentDist
+export sample_tree
+export get_entropy
 export mrca_tree
-
 export readable_name
-export robinson_foulds_distance, get_ess
+export robinson_foulds_distance
+export get_ess
 
 end # module TractableTimeTreeDistributions
