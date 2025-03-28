@@ -18,8 +18,8 @@ num_samples = 10_000
 train_fraction = 0.75
 burn_in_fraction = 0.1
 
-trees_file = "/Users/tobiaochsner/Documents/Thesis/Validation/data/mcmc_runs/yule-10_1.trees"
-output_dir = "/Users/tobiaochsner/Documents/Thesis/TractableTimeTreeDistributions"
+trees_file = "/Users/tobiaochsner/Documents/Thesis/TractableTreeDistributions/yule-100-0.trees"
+output_dir = "/Users/tobiaochsner/Documents/Thesis/TractableTreeDistributions"
 
 if length(ARGS) == 2
     trees_file = ARGS[1]
@@ -56,9 +56,8 @@ distributions_train = [distribution(trees_train) for distribution in distributio
 log_ccd_densities_val = log_density.(Ref(ccd_train), trees_val)
 
 log_data_likelihoods_val = []
-ad_test_statistics_val = []
-ad_test_p_values_val = []
 credible_sets_val = []
+cramer_von_mises_val = []
 
 for (i, distribution) in enumerate(distributions_train)
     log_densities_val = log_density.(Ref(distribution), trees_val) .+ log_ccd_densities_val
@@ -70,15 +69,11 @@ for (i, distribution) in enumerate(distributions_train)
     samples = [sample_tree(distribution, sample_tree(ccd_train)) for _ = 1:num_samples]
     log_densities_samples = log_density.(Ref(distribution), samples) .+ log_density.(Ref(ccd_train), samples)
 
-    ad_test = KSampleADTest(log_densities_val, log_densities_samples)
-    ad_test_statistic = ad_test.A²k
-    ad_test_p_value = pvalue(ad_test)
-    push!(ad_test_statistics_val, ad_test_statistic)
-    push!(ad_test_p_values_val, ad_test_p_value)
-
     ecdf_func = ecdf(log_densities_samples)
     credible_sets = (1.0 .- ecdf_func(log_densities_val))
+    cramer_von_mises_criterion = cramer_von_mises(credible_sets)
     push!(credible_sets_val, credible_sets)
+    push!(cramer_von_mises_val, cramer_von_mises_criterion)
 end
 
 @info "Get point estimates based on all ESS trees"
@@ -106,8 +101,7 @@ open(statistics_file, "w") do io
 
     for i in eachindex(distributions)
         println(io, "$(readable_name(distributions[i]));log_data_likelihood;$(log_data_likelihoods_val[i])")
-        println(io, "$(readable_name(distributions[i]));anderson_darling_test_statistics;$(ad_test_statistics_val[i])")
-        println(io, "$(readable_name(distributions[i]));anderson_darling_p_value;$(ad_test_p_values_val[i])")
+        println(io, "$(readable_name(distributions[i]));cramer_von_mises;$(cramer_von_mises_val[i])")
     end
 end
 

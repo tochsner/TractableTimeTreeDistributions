@@ -32,6 +32,7 @@ export construct_tree
 include("utils/construct_tree.jl")
 include("utils/rf_distance.jl")
 include("utils/tree_ess.jl")
+include("utils/cramer_von_mises.jl")
 
 include("distributions/distribution.jl")
 include("distributions/short_branch_dist.jl")
@@ -68,5 +69,6 @@ export mrca_tree
 export readable_name
 export robinson_foulds_distance
 export get_ess
+export cramer_von_mises
 
 end # module TractableTimeTreeDistributions

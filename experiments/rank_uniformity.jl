@@ -50,16 +50,16 @@ end
 
 distribution_constructors = [
     # HeightRatioDist{IndependentDist{LogNormal},IndependentDist{LogitNormal}}
-    # HeightRatioDist{IndependentDist{LogNormal},IndependentDist{Beta}}
+    HeightRatioDist{IndependentDist{LogNormal},IndependentDist{Beta}}
     # ShorterBranchDist{IndependentDist{LogNormal}}
-    # ShorterBranchDist{IndependentDist{Gamma}}
+    ShorterBranchDist{IndependentDist{Gamma}}
     # LastDivergenceBranchDist{IndependentDist{LogNormal}, IndependentDist{LogNormal}}
     # LastDivergenceBranchDist{IndependentDist{Gamma}, IndependentDist{Gamma}}
-    HeightRatioDist{IndependentDist{LogNormal},IndependentDist{LogitNormal}},
-    LastDivergenceBranchDist{IndependentDist{Gamma},IndependentDist{Gamma}},
+    # HeightRatioDist{IndependentDist{LogNormal},IndependentDist{LogitNormal}},
+    # LastDivergenceBranchDist{IndependentDist{Gamma},IndependentDist{Gamma}},
 ]
 
 plot_rank_uniformity(
     distribution_constructors,
-    "/Users/tobiaochsner/Documents/Thesis/Validation/data/mcmc_runs/yule-50_40.trees",
+    "/Users/tobiaochsner/Documents/Thesis/Tests Calibration/yule-100-0-calibrated.trees",
 )
