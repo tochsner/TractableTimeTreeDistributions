@@ -33,13 +33,6 @@ pkg> instantiate
 
 ## 📖 Documentation
 
-The documentation is available [here](https://tochsner.github.io/TractableTimeTreeDistributions.jl/dev/).
-
-```bash
-git clone https://github.com/tochsner/TractableTimeTreeDistributions.git
-
-##  Usage
-
 ### Interactive Workflow with Model Selection (recommended)
 
 The recommended workflow is the following:
