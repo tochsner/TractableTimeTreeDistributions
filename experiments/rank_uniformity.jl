@@ -49,14 +49,14 @@ function plot_rank_uniformity(distribution_constructors, tree_file)
 end
 
 distribution_constructors = [
-    # HeightRatioDist{IndependentDist{LogNormal},IndependentDist{LogitNormal}}
+    HeightRatioDist{IndependentDist{LogNormal},IndependentDist{LogitNormal}}
     HeightRatioDist{IndependentDist{LogNormal},IndependentDist{Beta}}
-    # ShorterBranchDist{IndependentDist{LogNormal}}
+    ShorterBranchDist{IndependentDist{LogNormal}}
     ShorterBranchDist{IndependentDist{Gamma}}
-    # LastDivergenceBranchDist{IndependentDist{LogNormal}, IndependentDist{LogNormal}}
-    # LastDivergenceBranchDist{IndependentDist{Gamma}, IndependentDist{Gamma}}
-    # HeightRatioDist{IndependentDist{LogNormal},IndependentDist{LogitNormal}},
-    # LastDivergenceBranchDist{IndependentDist{Gamma},IndependentDist{Gamma}},
+    LastDivergenceBranchDist{IndependentDist{LogNormal},IndependentDist{LogNormal}}
+    LastDivergenceBranchDist{IndependentDist{Gamma},IndependentDist{Gamma}}
+    HeightRatioDist{IndependentDist{LogNormal},IndependentDist{LogitNormal}}
+    LastDivergenceBranchDist{IndependentDist{Gamma},IndependentDist{Gamma}}
 ]
 
 plot_rank_uniformity(

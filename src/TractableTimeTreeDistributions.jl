@@ -71,4 +71,6 @@ export robinson_foulds_distance
 export get_ess
 export cramer_von_mises
 
+export julia_main
+
 end # module TractableTimeTreeDistributions
