@@ -10,6 +10,9 @@ function get_ess(cladified_trees::Vector{CladifiedTree})
         total_branch_lengths_ess = get_ess(total_branch_lengths)
     catch
     end
+    if total_branch_lengths_ess === NaN
+        total_branch_lengths_ess = Inf
+    end
 
     ccd = CCD1(cladified_trees)
     map_tree = point_estimate(ccd)
@@ -19,6 +22,9 @@ function get_ess(cladified_trees::Vector{CladifiedTree})
     try
         distances_to_map_tree_ess = get_ess(distances_to_map_tree)
     catch
+    end
+    if distances_to_map_tree_ess === NaN
+        distances_to_map_tree_ess = Inf
     end
 
     return min(distances_to_map_tree_ess, total_branch_lengths_ess)

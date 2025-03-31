@@ -18,7 +18,7 @@ num_samples = 10_000
 train_fraction = 0.75
 burn_in_fraction = 0.1
 
-trees_file = "/Users/tobiaochsner/Documents/Thesis/TractableTreeDistributions/yule-100-0.trees"
+trees_file = "/Users/tobiaochsner/Downloads/data_from_bayesian_divergence__eciton_concatenated.trees"
 output_dir = "/Users/tobiaochsner/Documents/Thesis/TractableTreeDistributions"
 
 if length(ARGS) == 2
@@ -27,7 +27,6 @@ if length(ARGS) == 2
     @info "Input file is $(trees_file)"
     @info "Output directory is $(output_dir)"
 end
-
 
 @info "Load and prepare reference trees"
 

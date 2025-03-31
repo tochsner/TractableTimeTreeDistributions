@@ -23,7 +23,8 @@ get_leaf_index(tree::Tree, leaf::String) = findfirst(x -> x == leaf, sort(tiplab
 
 
 """
-A patch for the existing method changing the regex of taxon names to also allow periods.
+A patch for the existing method changing the regex of taxon names to also allow periods and
+    brackets.
 """
 function PhyloNetworks.readnexus_translatetable(io)
     rx_translate = r"^\s*translate"i
@@ -44,7 +45,7 @@ function PhyloNetworks.readnexus_translatetable(io)
     end
     if translate # then read the table
         rx_end = r"^\s*;"
-        rx_idname = r"\s*(\d+)\s+([\.\w]+)[\s]*([,;]?)"
+        rx_idname = r"\s*(\d+)\s+([\.\w\(\)\_\-]+)[\s]*([,;]?)"
         while true
             line = readline(io)
             occursin(rx_emptyline, line) && continue
