@@ -4,6 +4,8 @@ This repository contains the code for the julia package TractableTimeTreeDistrib
 
 ## 🚀 Getting Started
 
+(Currently, the package is being registered in the Julia package registry. This will take up to three days. Until then, the only way to install the package is by cloning this repo and installing it from source.)
+
 The easiest way to install the package is by downloading the latest binaries from the [release page](https://github.com/tochsner/TractableTimeTreeDistributions/releases). After downloading the archive, unpack it and you're ready to go:
 
 ```bash
