@@ -19,6 +19,25 @@ julia> Pkg.add("TractableTimeTreeDistributions")
 julia> Pkg.add("Distributions")
 ```
 
+Another option is to clone the repository and use the package directly from the source code:
+
+```bash
+git clone https://github.com/tochsner/TractableTimeTreeDistributions.git
+cd TractableTimeTreeDistributions
+
+julia
+julia>]
+pkg> activate .
+pkg> instantiate
+```
+
+## 📖 Documentation
+
+The documentation is available [here](https://tochsner.github.io/TractableTimeTreeDistributions.jl/dev/).
+
+```bash
+git clone https://github.com/tochsner/TractableTimeTreeDistributions.git
+
 ##  Usage
 
 ### Interactive Workflow with Model Selection (recommended)
@@ -47,7 +66,7 @@ Log Data Likelihoods
 [ Info: Last Divergence (LogNormal), Branches (LogNormal):      231618.75107464782
 ```
 
-3. Furthermore, you will be asked if you want to use the model with the highest likelihood. Alternatively, you can also specify the model you want to use:
+3. You will now be asked if you want to use the model with the highest likelihood. Alternatively, you can also specify the model you want to use:
 
 ```bash
 ---------------
